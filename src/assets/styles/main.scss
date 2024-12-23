@@ -1,0 +1,26 @@
+// @import "fonts";
+// @import "slider";
+
+body {
+  margin: 0;
+}
+
+img {
+  display: block;
+}
+
+ul, h3 {
+  padding: 0;
+  margin: 0;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1400px;
+}
