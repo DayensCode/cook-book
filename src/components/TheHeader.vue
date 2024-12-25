@@ -6,7 +6,7 @@
         <li>Подборки</li>
         <li>Сохраненное</li>
       </ul>
-      <div class="flex">
+      <div class="flex user">
         <!-- <img alt="user" src="./assets/logo.png"> -->
         <span>kitchener14</span>
       </div>
@@ -25,7 +25,7 @@ export default {
   background-color: #E3CBBC;
 
   .container_header {
-    padding: 15px 0;
+    padding: 24px 0 32px;
     display: flex;
     justify-content: space-between;
   }
@@ -34,5 +34,14 @@ export default {
 ul {
   gap: 29px;
   list-style: none;
+  align-items: flex-end;
+
+  li:first-of-type {
+    margin-right: 70px;
+  }
+}
+
+.user {
+  align-items: flex-end;
 }
 </style>
