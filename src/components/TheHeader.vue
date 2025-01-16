@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import SvgIcon from './SvgIcon.vue';
+import SvgIcon from './SvgIcon.vue'
 
 export default {
   name: 'TheHeader',
@@ -25,7 +25,7 @@ export default {
 
 <style lang="scss" scoped>
 .header {
-  background-color: #E3CBBC;
+  background-color: #e3cbbc;
 
   .container_header {
     padding: 24px 0 32px;
