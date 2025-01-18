@@ -1,21 +1,10 @@
 <template>
-  <TheHeader />
-  <TheSlider />
-  <CardList />
+<router-view/>
 </template>
 
 <script>
-import TheHeader from './components/TheHeader.vue'
-import TheSlider from './components/TheSlider.vue'
-import CardList from './components/CardList.vue'
-
 export default {
   name: 'App',
-  components: {
-    TheHeader,
-    TheSlider,
-    CardList
-  }
 }
 </script>
 
