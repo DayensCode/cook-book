@@ -16,5 +16,6 @@ export default {
   font-size: 18px;
   color: #fff;
   background-image: url("./assets/img/bg.png");
+  background-position: center;
 }
 </style>

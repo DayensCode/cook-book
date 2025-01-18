@@ -32,7 +32,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: #2F2222;
+    color: #2f2222;
 
     span {
       padding: 9px 17px;

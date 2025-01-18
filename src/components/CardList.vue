@@ -39,6 +39,11 @@ export default {
   input {
     padding: 14px 31px;
     width: 100%;
+    background-color: #e3cbbc;
+    border: 2px solid #e3cbbc;
+    border-radius: 3px;
+    outline: none;
+    font-size: 16px;
   }
 
   button {
@@ -49,6 +54,12 @@ export default {
 
     font-size: 18px;
     color: #fff;
+    cursor: pointer;
+    transition: background-color .3s ease;
+
+    &:hover {
+      background-color: #8ec6a3;
+    }
   }
 }
 
@@ -90,18 +101,20 @@ export default {
     padding: 15px 0 15px 15px;
     width: 100%;
     border: none;
+    outline: none;
     border-radius: 20px;
     box-sizing: border-box;
     position: relative;
     z-index: 2;
+    font-size: 16px;
   }
 
   button {
-    margin-top: 21px;
+    margin-top: 22px;
     width: 100%;
     display: block;
     
-    padding: 14px 0;
+    padding: 12px 0;
     background-color: #9bd5b1;
     border: none;
     border-radius: 20px;
@@ -111,6 +124,11 @@ export default {
     position: relative;
     z-index: 2;
     cursor: pointer;
+    transition: background-color .3s ease;
+
+    &:hover {
+      background-color: #8ec6a3;
+    }
   }
 }
 </style>

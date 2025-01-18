@@ -46,6 +46,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 .slide {
   background-image: url('../assets/img/slide-bg.png');
+  background-size: cover;
   padding: 60px;
   text-align: left;
   border-radius: 0 0 8px 8px;
