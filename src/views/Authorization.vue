@@ -16,7 +16,7 @@ export default {
   name: 'App',
   methods: {
     goBack() {
-      window.history.back(); // Возвращает пользователя на предыдущую страницу
+      window.history.back(); 
     }
   }
 }
