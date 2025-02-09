@@ -1,30 +1,31 @@
 <template>
-  <div >
-   <header class="header">
-    <nav  class="container container_header">
+  <div>
+    <header class="header">
+      <nav class="container container_header">
         <router-link to="/"><SvgIcon class="logo" name="logo" /></router-link>
         <router-link to="/saved-recepies">Подборки</router-link>
         <router-link to="/recipe-collections">Сохраненное</router-link>
-      <div class="flex user">
-        
-        <router-link to="/authorization"><SvgIcon class="account" name="account" /></router-link>
-        <span>kitchener14</span>
-      </div>
-    </nav>
+        <div class="flex user">
+          <router-link to="/authorization"
+            ><SvgIcon class="account" name="account"
+          /></router-link>
+          <span>kitchener14</span>
+        </div>
+      </nav>
     </header>
     <main>
-      <router-view/>
+      <router-view />
     </main>
   </div>
 </template>
 
 <script>
-import SvgIcon from './SvgIcon.vue'
+import SvgIcon from "./SvgIcon.vue";
 
 export default {
-  name: 'TheHeader',
-  components: { SvgIcon }
-}
+  name: "TheHeader",
+  components: { SvgIcon },
+};
 </script>
 
 <style lang="scss" scoped>

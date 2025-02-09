@@ -1,15 +1,16 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import TheHeader from '@/components/TheHeader.vue';
-import Authorization from '@/views/Authorization.vue';
-import MainPage from '@/views/MainPage.vue';
-import RecipeCollections from '@/views/RecipeCollections.vue';
-import SavedRecepies from '@/views/SavedRecipes.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+import Authorization from './views/Authorization.vue'
+import MainPage from './views/MainPage.vue'
+import RecipeCollections from './views/RecipeCollections.vue'
+import SavedRecepies from './views/SavedRecipes.vue'
+import type {RouteRecordRaw} from 'vue-router'
+import TheHeader from './components/TheHeader.vue'
 
-// Определяем типы маршрутов
-const routes = [
+// Определяем маршруты с типами
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => TheHeader,
+    component: TheHeader,
     children: [
       {
         path: '',
@@ -33,11 +34,11 @@ const routes = [
     name: 'Authorization',
     component: Authorization,
   },
-];
+]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-});
+})
 
-export default router;
+export default router

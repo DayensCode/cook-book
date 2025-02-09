@@ -1,16 +1,12 @@
 <template>
-    <div>COLLECT</div>
-  </template>
+  <div>COLLECT</div>
+</template>
 
-  
 <script>
-
 export default {
-  name: 'RecipeCollections',
-  components: {
-  }
-}
+  name: "RecipeCollections",
+  components: {},
+};
 </script>
 
-<style>
-</style>
+<style></style>
