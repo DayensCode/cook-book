@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <div class="search flex">
-      <input type="text" placeholder="Например, рецепты вторых блюд ...">
+      <input type="text" placeholder="Например, рецепты вторых блюд ..." />
       <button>Найти</button>
     </div>
 
     <div class="content">
       <div class="aside">
         <h3>создай подборку</h3>
-        <input type="text" placeholder="Мои рецепты ...">
+        <input type="text" placeholder="Мои рецепты ..." />
         <button>Создать</button>
       </div>
 
@@ -23,12 +23,12 @@
 </template>
 
 <script>
-import TheCard from './TheCard.vue'
+import TheCard from "./TheCard.vue";
 
 export default {
-  name: 'CardList',
-  components: { TheCard }
-}
+  name: "CardList",
+  components: { TheCard },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -55,7 +55,7 @@ export default {
     font-size: 18px;
     color: #fff;
     cursor: pointer;
-    transition: background-color .3s ease;
+    transition: background-color 0.3s ease;
 
     &:hover {
       background-color: #8ec6a3;
@@ -79,7 +79,7 @@ export default {
   position: relative;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -113,7 +113,7 @@ export default {
     margin-top: 22px;
     width: 100%;
     display: block;
-    
+
     padding: 12px 0;
     background-color: #9bd5b1;
     border: none;
@@ -124,7 +124,7 @@ export default {
     position: relative;
     z-index: 2;
     cursor: pointer;
-    transition: background-color .3s ease;
+    transition: background-color 0.3s ease;
 
     &:hover {
       background-color: #8ec6a3;

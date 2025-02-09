@@ -1,24 +1,20 @@
 <template>
-    <div>23123231132231</div>
-    
-    <TheCard />
-    <TheCard />
-    <TheCard />
-  </template>
+  <div>23123231132231</div>
 
-  
+  <TheCard />
+  <TheCard />
+  <TheCard />
+</template>
+
 <script>
-import TheCard from '@/components/TheCard.vue';
-
+import TheCard from "@/components/TheCard.vue";
 
 export default {
-  name: 'SavedRecipes',
+  name: "SavedRecipes",
   components: {
-    
-    TheCard
-  }
-}
+    TheCard,
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

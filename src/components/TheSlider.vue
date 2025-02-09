@@ -6,7 +6,11 @@
           <SvgIcon :class="isLiked" :name="isLiked" />
         </div>
         <h3>Сырники из творога</h3>
-        <p class="description">Сырники классические — одно из самых простых блюд, с которых многие начинают знакомство с кулинарией. Это настоящая классика жанра, которая удается всем и всегда!</p>
+        <p class="description">
+          Сырники классические — одно из самых простых блюд, с которых многие
+          начинают знакомство с кулинарией. Это настоящая классика жанра,
+          которая удается всем и всегда!
+        </p>
       </div>
     </Slide>
 
@@ -17,35 +21,35 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import { Carousel, Slide, Navigation } from 'vue3-carousel'
-import SvgIcon from './SvgIcon.vue'
+import { defineComponent, ref } from "vue";
+import { Carousel, Slide, Navigation } from "vue3-carousel";
+import SvgIcon from "./SvgIcon.vue";
 
 export default defineComponent({
-  name: 'TheSlider',
+  name: "TheSlider",
   components: {
     Carousel,
     Slide,
     Navigation,
-    SvgIcon
+    SvgIcon,
   },
   setup() {
-    const isLiked = ref('like')
+    const isLiked = ref("like");
     const toggleLike = () => {
-      isLiked.value = isLiked.value === 'like' ? 'like-fill' : 'like'
-    }
+      isLiked.value = isLiked.value === "like" ? "like-fill" : "like";
+    };
 
     return {
       isLiked,
-      toggleLike
-    }
-  }
-})
+      toggleLike,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>
 .slide {
-  background-image: url('../assets/img/slide-bg.png');
+  background-image: url("../assets/img/slide-bg.png");
   background-size: cover;
   padding: 60px;
   text-align: left;
@@ -53,7 +57,7 @@ export default defineComponent({
   position: relative;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -91,7 +95,7 @@ export default defineComponent({
 </style>
 
 <style lang="scss">
-.carousel__prev, 
+.carousel__prev,
 .carousel__next {
   color: #fff !important;
 

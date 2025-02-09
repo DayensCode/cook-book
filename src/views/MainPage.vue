@@ -1,21 +1,19 @@
 <template>
-    <TheSlider />
-    <CardList />
-  </template>
+  <TheSlider />
+  <CardList />
+</template>
 
-  
 <script>
-import CardList from '@/components/CardList.vue';
-import TheSlider from '@/components/TheSlider.vue';
+import CardList from "@/components/CardList.vue";
+import TheSlider from "@/components/TheSlider.vue";
 
 export default {
-  name: 'MainPage',
+  name: "MainPage",
   components: {
     TheSlider,
-    CardList    
-  }
-}
+    CardList,
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>
