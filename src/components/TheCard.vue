@@ -12,7 +12,7 @@
         </p>
       </div>
     </div>
-    <img alt="logo" src="../assets/img/card.png" />
+    <img alt="collections-card" src="../assets/img/card.png" />
   </div>
 </template>
 

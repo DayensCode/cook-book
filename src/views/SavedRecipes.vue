@@ -1,20 +1,31 @@
 <template>
-  <div>23123231132231</div>
+  <div class="container">
+    <TheSearch />
 
-  <TheCard />
-  <TheCard />
-  <TheCard />
+    <div class="content">
+      <RecipeCard />
+      <RecipeCard />
+      <RecipeCard />
+      <RecipeCard />
+      <RecipeCard />
+    </div>
+  </div>
 </template>
 
 <script>
-import TheCard from "@/components/TheCard.vue";
+import TheSearch from "@/components/TheSearch.vue";
+import RecipeCard from "@/components/RecipeCard.vue";
 
 export default {
   name: "SavedRecipes",
-  components: {
-    TheCard,
-  },
+  components: { TheSearch, RecipeCard },
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.content {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+}
+</style>
