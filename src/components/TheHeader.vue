@@ -1,22 +1,22 @@
 <template>
-  <div>
-    <header class="header">
-      <nav class="container container_header">
+  <header class="header">
+    <nav class="container container_header">
+      <div class="left-nav">
         <router-link to="/"><SvgIcon class="logo" name="logo" /></router-link>
-        <router-link to="/saved-recepies">Подборки</router-link>
-        <router-link to="/recipe-collections">Сохраненное</router-link>
-        <div class="flex user">
-          <router-link to="/authorization"
-            ><SvgIcon class="account" name="account"
-          /></router-link>
+        <router-link to="/recipe-collections">Подборки</router-link>
+        <router-link to="/saved-recepies">Сохраненное</router-link>
+      </div>
+      <div class="user">
+        <router-link to="/authorization">
+          <SvgIcon class="account" name="account"/>
           <span>kitchener14</span>
-        </div>
-      </nav>
-    </header>
-    <main>
-      <router-view />
-    </main>
-  </div>
+        </router-link>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <router-view />
+  </main>
 </template>
 
 <script>
@@ -36,32 +36,34 @@ export default {
     padding: 24px 0 32px;
     display: flex;
     justify-content: space-between;
+  }
 
-    .logo {
-      width: 104px;
-      height: 30px;
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
+
+  .left-nav {
+    a {
+      margin-right: 30px;
     }
   }
-}
 
-ul {
-  gap: 29px;
-  list-style: none;
-  align-items: flex-end;
-
-  li:first-of-type {
-    margin-right: 70px;
+  .user {
     display: flex;
+    align-items: flex-end;
   }
 }
 
-.user {
-  align-items: flex-end;
+.logo {
+  width: 104px;
+  height: 30px;
+  margin-right: 70px;
+}
 
-  .account {
-    width: 22px;
-    height: 22px;
-    margin-right: 18px;
-  }
+.account {
+  width: 22px;
+  height: 22px;
+  margin-right: 18px;
 }
 </style>
