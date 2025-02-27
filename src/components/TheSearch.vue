@@ -1,13 +1,34 @@
 <template>
   <div class="search flex">
-    <input type="text" placeholder="Например, рецепты вторых блюд ..." />
-    <button>Найти</button>
+    <el-input class="search-input" v-model="searchQuery" type="text" @keyup.enter="searchRecipes" placeholder="Например, рецепты вторых блюд ..." clearable />
+    <el-button class="btn-light-green"  @click="searchRecipes" :disabled="!searchQuery.trim()">Найти</el-button>
   </div>
+
 </template>
   
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: "TheSearch",
+  computed: {
+    searchQuery: {
+      get() {
+        return this.$store.getters.query; 
+      },
+      set(value) {
+        this.$store.commit("setQuery", value); 
+      }
+    }
+  },
+  methods: {
+    ...mapActions(["fetchRecipes"]),
+    searchRecipes() {
+      if (this.searchQuery.trim()) { 
+        this.fetchRecipes();
+      }
+    }
+  }
 };
 </script>
   
@@ -16,7 +37,7 @@ export default {
   margin-top: 32px;
   gap: 20px;
 
-  input {
+  .search-input {
     padding: 14px 31px;
     width: 100%;
     background-color: #e3cbbc;
@@ -26,20 +47,6 @@ export default {
     font-size: 16px;
   }
 
-  button {
-    padding: 14px 31px;
-    background-color: #9bd5b1;
-    border: none;
-    border-radius: 3px;
 
-    font-size: 18px;
-    color: #fff;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background-color: #8ec6a3;
-    }
-  }
 }
 </style>
