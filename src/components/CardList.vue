@@ -8,25 +8,70 @@
         <input type="text" placeholder="Мои рецепты ..." />
         <button>Создать</button>
       </div>
-
       <div>
-        <TheCard />
-        <TheCard />
-        <TheCard />
-        <TheCard />
+        <div v-if="loading">Загрузка...</div>
+      <div v-if="error" class="error">{{ error }}</div>
+      <div v-if="query.trim() === ''" class="error">Введите запрос, чтобы найти рецепты</div>
+
+     
+      <div v-if="recipes.length">
+        <TheCard
+        v-for="(recipe, index) in recipes"
+        :key="index"
+        :title="recipe?.title"
+        :ingredients="recipe?.ingredients"
+        :servings="recipe?.servings"
+        :instructions="recipe?.instructions"
+
+          @openModal="openModal(recipe)"
+      /></div>
       </div>
     </div>
+    <RecipeCardModal v-if="selectedRecipe" :recipe="selectedRecipe" @close="closeModal" />
+  
   </div>
 </template>
 
 <script>
 import TheSearch from "./TheSearch.vue";
 import TheCard from "./TheCard.vue";
+import { mapActions, mapGetters } from "vuex";
+import RecipeCardModal from "./modals/RecipeCardModal.vue";
 
 export default {
   name: "CardList",
-  components: { TheSearch, TheCard },
+  components: { TheSearch, TheCard , RecipeCardModal},
+  data() {
+    return {
+      selectedRecipe: null 
+    };
+  },
+  mounted() {
+    this.fetchRecipes(); 
+  },
+  watch: {
+    query() {
+      this.fetchRecipes(); 
+    }
+  },
+
+  computed: {
+    ...mapGetters(["recipes", "isLoading", "error", "query"]),
+    loading() {
+      return this.isLoading;
+    }
+  },
+  methods: {
+    ...mapActions(['fetchRecipes']),
+    openModal(recipe) {
+      this.selectedRecipe = recipe;
+    },
+    closeModal() {
+      this.selectedRecipe = null; 
+    }
+  }
 };
+
 </script>
 
 <style lang="scss" scoped>
@@ -34,6 +79,10 @@ export default {
   margin-top: 30px;
   display: flex;
   gap: 42px;
+}
+
+.error{
+  color: black;
 }
 
 .aside {

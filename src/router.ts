@@ -5,8 +5,9 @@ import RecipeCollections from './views/RecipeCollections.vue'
 import SavedRecepies from './views/SavedRecipes.vue'
 import type {RouteRecordRaw} from 'vue-router'
 import TheHeader from './components/TheHeader.vue'
+import SignUp from './views/SignUp.vue'
+import Account from './views/Account.vue'
 
-// Определяем маршруты с типами
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -27,12 +28,22 @@ const routes: RouteRecordRaw[] = [
         name: 'SavedRecepies',
         component: SavedRecepies,
       },
+      {
+        path: '/account',
+        name: 'Account',
+        component: Account,
+      },
     ],
   },
   {
     path: '/authorization',
     name: 'Authorization',
     component: Authorization,
+  },
+  {
+    path: '/sign-up',
+    name: 'SignUp',
+    component: SignUp,
   },
 ]
 
