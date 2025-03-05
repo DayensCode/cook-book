@@ -17,18 +17,30 @@
     </div>
     <div class="description flex">
       <h3>Постный салат</h3>
-      <SvgIcon class="like-fill" name="like-fill" />
+      <SvgIcon :class="isLiked" :name="isLiked" @click="toggleLike" />
     </div>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, ref } from "vue";
 import SvgIcon from "@/components/SvgIcon.vue";
 
-export default {
+export default defineComponent({
   name: "RecipeCard",
   components: { SvgIcon },
-};
+  setup() {
+    const isLiked = ref<"like" | "like-fill">("like");
+    const toggleLike = () => {
+      isLiked.value = isLiked.value === "like" ? "like-fill" : "like";
+    };
+
+    return {
+      isLiked,
+      toggleLike
+    };
+  },
+})
 </script>
 
 <style lang="scss" scoped>
@@ -73,8 +85,8 @@ export default {
         text-transform: uppercase;
       }
 
-      ul {
-        list-style: none;
+      li::marker {
+        content:('- ')
       }
     }
   }
@@ -91,7 +103,7 @@ export default {
 
 .like,
 .like-fill {
-  width: 16px;
+  width: 18px;
   height: 16px;
 }
 </style>

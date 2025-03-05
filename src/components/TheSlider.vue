@@ -98,7 +98,7 @@ export default defineComponent({
 
     .like,
     .like-fill {
-      width: 16px;
+      width: 18px;
       height: 16px;
     }
   }
