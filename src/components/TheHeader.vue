@@ -9,18 +9,17 @@
         <router-link to="/saved-recepies" v-if="globalState.isAuthorized">Сохраненное</router-link>
       </div>
       <div class="user">
-        <router-link v-if="globalState.isAuthorized" to="/account">
+        <router-link v-if="globalState.isAuthorized" to="/account" class="login-container">
           <SvgIcon class="account" name="account" />
+          <span>{{ userInfo?.username }}</span>
         </router-link>
 
         <router-link v-if="!globalState.isAuthorized" to="/authorization" class="login-container">
-
           <SvgIcon class="login" name="login" />
           <p>Войти в аккаунт</p>
         </router-link>
-        <span>{{ userInfo?.username }}</span>
-        <Logout v-if="globalState.isAuthorized" />
 
+        <Logout v-if="globalState.isAuthorized" />
       </div>
     </nav>
   </header>
@@ -64,6 +63,13 @@ export default {
   }
 
   .left-nav {
+    display: flex;
+    align-items: flex-end;
+
+    svg {
+      display: block;
+    }
+
     a {
       margin-right: 30px;
     }
@@ -72,13 +78,14 @@ export default {
   .user {
     display: flex;
     align-items: flex-end;
-    gap: 1.5rem
+    gap: 1.5rem;
   }
 }
 
 .login-container{
   display: flex;
-  gap: 1rem
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .logo {
