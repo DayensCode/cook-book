@@ -3,9 +3,9 @@
     <div class="description">
       <span>Простые рецепты на каждый день</span>
       <div class="error">
-      <div v-if="loading">Загрузка...</div>
-      <div v-if="error" >{{ error }}</div>
-</div>
+        <div v-if="loading">Загрузка...</div>
+        <div v-if="error" >{{ error }}</div>
+      </div>
       <div class="content" ref="content" :class="{ expanded: isExpanded }">
         <h3>{{ title }}</h3>
         <p><strong>Ингредиенты:</strong> {{ ingredients.replace(/\|/g, ", ") }}</p>

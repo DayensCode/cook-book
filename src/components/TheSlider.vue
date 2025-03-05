@@ -1,9 +1,13 @@
 <template>
   <Carousel :items-to-show="3.2" :wrap-around="true" :gap="3">
-    <Slide v-for="slide in 10" :key="slide">
+    <Slide v-for="slide in slides" :key="slide.id">
       <div class="slide">
-        <div class="like-container" @click="toggleLike">
-          <SvgIcon :class="isLiked" :name="isLiked" />
+        <div class="like-container" @click="toggleLike(slide.id)">
+          <SvgIcon
+            v-if="globalState.isAuthorized"
+            :class="slide.isLiked ? 'like-fill' : 'like'"
+            :name="slide.isLiked ? 'like-fill' : 'like'"
+          />
         </div>
         <h3>Сырники из творога</h3>
         <p class="description">
@@ -20,10 +24,15 @@
   </Carousel>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, ref } from "vue";
 import { Carousel, Slide, Navigation } from "vue3-carousel";
 import SvgIcon from "./SvgIcon.vue";
+
+interface ISlideItem {
+  id: number;
+  isLiked: boolean;
+}
 
 export default defineComponent({
   name: "TheSlider",
@@ -33,14 +42,21 @@ export default defineComponent({
     Navigation,
     SvgIcon,
   },
+  inject: ["globalState"],
   setup() {
-    const isLiked = ref("like");
-    const toggleLike = () => {
-      isLiked.value = isLiked.value === "like" ? "like-fill" : "like";
+    const slides = ref<ISlideItem[]>(
+      Array.from({ length: 10 }, (_, i) => ({ id: i, isLiked: false }))
+    );
+
+    const toggleLike = (id: number) => {
+      const slide = slides.value.find((s) => s.id === id);
+      if (slide) {
+        slide.isLiked = !slide.isLiked;
+      }
     };
 
     return {
-      isLiked,
+      slides,
       toggleLike,
     };
   },
