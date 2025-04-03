@@ -1,6 +1,7 @@
 <template>
-  <div @click="logout">
+  <div @click="logout" class="flex">
     <SvgIcon class="logout" name="logout"/>
+    <span>Выйти</span>
   </div>
 </template>
   
