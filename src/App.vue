@@ -24,5 +24,6 @@ export default defineComponent({
   background-size: contain;
   background-image: url("./assets/img/back.png");
   background-position: center;
+  min-height: 100vh;
 }
 </style>

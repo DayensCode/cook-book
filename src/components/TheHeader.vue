@@ -6,12 +6,17 @@
       </router-link>
 
       <el-input
+        v-model="query"
         class="search-input"
         placeholder="Например, рецепты вторых блюд ..."
         clearable
+        @clear="searchRecipes"
+        @keyup.enter="searchRecipes"
       >
         <template #suffix>
-          <SvgIcon class="search-icon" name="search" />
+          <div class="search-icon-bg flex">
+            <SvgIcon class="search-icon" name="search" @click="searchRecipes" />
+          </div>
         </template>
       </el-input>
 
@@ -19,7 +24,7 @@
         <el-dropdown v-if="globalState.isAuthorized" trigger="hover">
           <router-link to="/account" class="user-info flex">
             <SvgIcon class="account" name="account" />
-            <span>{{ userInfo?.username }}</span>
+            <span>{{ globalState.user.username }}</span>
           </router-link>
           <template #dropdown>
             <el-dropdown-menu>
@@ -54,21 +59,22 @@
   </main>
 </template>
 
-<script>
+<script setup lang="ts">
+import { inject } from "vue";
+import { storeToRefs } from "pinia";
+import { useRecipeStore } from "@/store/index";
+
 import Logout from "./Logout.vue";
 import SvgIcon from "./SvgIcon.vue";
 
-export default {
-  name: "TheHeader",
-  components: { SvgIcon, Logout },
+const globalState = inject("globalState") as any;
 
-  inject: ["globalState"],
-  computed: {
-    userInfo() {
-      return this.globalState.user
-    }
-  }
-};
+const recipeStore = useRecipeStore();
+const { query } = storeToRefs(recipeStore);
+
+function searchRecipes() {
+  recipeStore.fetchRecipes();
+}
 </script>
 
 <style lang="scss" scoped>
@@ -93,6 +99,11 @@ export default {
     width: 24px;
     height: 24px;
     cursor: pointer;
+  }
+
+  .search-icon-bg {
+    background-color: #C9B5A8;
+    height: 100%;
   }
 
   .user-info {
@@ -124,9 +135,9 @@ export default {
 }
 
 :deep(.el-input__suffix-inner) {
-  background-color: #C9B5A8;
+  flex-direction: row-reverse;
 
-  &>:first-child {
+  &>div>:first-child {
     margin: 0 10px;
   }
 }

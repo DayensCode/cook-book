@@ -1,88 +1,50 @@
 <template>
   <div class="container">
-    <TheSearch />
-
     <div class="content">
       <div class="aside">
-        <h3>создай подборку</h3>
-        <input type="text" placeholder="Мои рецепты ..." />
+        <h3>добавь свой рецепт</h3>
+        <input type="text" placeholder="Блинчики с мясом ..." />
         <button>Создать</button>
       </div>
-      <div>
-        <div v-if="loading">Загрузка...</div>
-      <div v-if="error" class="error">{{ error }}</div>
-      <div v-if="query.trim() === ''" class="error">Введите запрос, чтобы найти рецепты</div>
 
-     
-      <div v-if="recipes.length">
-        <TheCard
-        v-for="(recipe, index) in recipes"
-        :key="index"
-        :title="recipe?.title"
-        :ingredients="recipe?.ingredients"
-        :servings="recipe?.servings"
-        :instructions="recipe?.instructions"
-
-          @openModal="openModal(recipe)"
-      /></div>
+      <div class="card-list">
+        <div v-if="loading" class="no-value">Загрузка...</div>
+        <div v-if="error" class="no-value">{{ error }}</div>
+        <div v-if="recipes?.length">
+          <TheCard
+            v-for="recipe in recipes"
+            :key="recipe.id"
+            :title="recipe.title"
+            :category="recipe.dish_type.name"
+            :instruction="recipe.content"
+            :time="recipe.cooking_time"
+          />
+        </div>
       </div>
     </div>
-    <RecipeCardModal v-if="selectedRecipe" :recipe="selectedRecipe" @close="closeModal" />
-  
   </div>
 </template>
 
-<script>
-import TheSearch from "./TheSearch.vue";
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useRecipeStore } from '@/store/index';
+
 import TheCard from "./TheCard.vue";
-import { mapActions, mapGetters } from "vuex";
-import RecipeCardModal from "./modals/RecipeCardModal.vue";
 
-export default {
-  name: "CardList",
-  components: { TheSearch, TheCard , RecipeCardModal},
-  data() {
-    return {
-      selectedRecipe: null 
-    };
-  },
-  mounted() {
-    this.fetchRecipes(); 
-  },
-  watch: {
-    query() {
-      this.fetchRecipes(); 
-    }
-  },
+const recipeStore = useRecipeStore();
+const { recipes, error, loading } = storeToRefs(recipeStore);
 
-  computed: {
-    ...mapGetters(["recipes", "isLoading", "error", "query"]),
-    loading() {
-      return this.isLoading;
-    }
-  },
-  methods: {
-    ...mapActions(['fetchRecipes']),
-    openModal(recipe) {
-      this.selectedRecipe = recipe;
-    },
-    closeModal() {
-      this.selectedRecipe = null; 
-    }
-  }
-};
-
+onMounted(() => {
+  recipeStore.fetchRecipes();
+});
 </script>
 
 <style lang="scss" scoped>
 .content {
-  margin-top: 30px;
+  margin-top: 40px;
   display: flex;
-  gap: 42px;
-}
-
-.error{
-  color: black;
+  gap: 40px;
 }
 
 .aside {
@@ -110,6 +72,7 @@ export default {
     white-space: nowrap;
     position: relative;
     z-index: 2;
+    font-size: 18px;
   }
 
   input {
@@ -146,5 +109,9 @@ export default {
       background-color: #8ec6a3;
     }
   }
+}
+
+.card-list {
+  flex: 1;
 }
 </style>

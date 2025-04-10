@@ -6,18 +6,19 @@ import 'element-plus/dist/index.css'
 
 import './assets/styles/main.scss'
 import 'vue3-carousel/carousel.css'
+
 import { getCurrentUser, initializeUsers } from './helpers/authorization'
-import store from './store'
+import { createPinia } from 'pinia'
 
 initializeUsers();
 
 const globalState = reactive({
-    isAuthorized: false,
-    isAdmin: false,
+  isAuthorized: false,
+  isAdmin: false,
   user: null as any,
-  });
+});
 
-  const currentUser = getCurrentUser();
+const currentUser = getCurrentUser();
 if (currentUser) {
   globalState.isAuthorized = true;
   globalState.isAdmin = currentUser.isAdmin || false;
@@ -27,7 +28,7 @@ if (currentUser) {
 const app = createApp(App)
 
 app.use(router)
-app.use(store)
+app.use(createPinia())
 app.use(ElementPlus)
 app.provide("globalState", globalState);
 app.mount('#app')

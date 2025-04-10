@@ -1,77 +1,44 @@
-import { createStore } from 'vuex';
+import { defineStore } from "pinia";
 
 interface State {
   recipes: any[];
   loading: boolean;
   error: string | null;
-  query: string; 
+  query: string;
 }
 
-export default createStore({
+export const useRecipeStore = defineStore("recipeStore", {
   state: (): State => ({
     recipes: [],
     loading: false,
     error: null,
-    query: 'chicken', 
+    query: "",
   }),
-  mutations: {
-    setRecipes(state, recipes) {
-      state.recipes = recipes;
-    },
-    setLoading(state, loading) {
-      state.loading = loading;
-    },
-    setError(state, error) {
-      state.error = error;
-    },
-    setQuery(state, query) {
-      state.query = query;
-    }
-  },
   actions: {
-    async fetchRecipes({ commit, state }) {
-      if (!state.query.trim()) { 
-        commit("setRecipes", []);
-        commit("setError", null);
-        return;
-      }
-      commit('setLoading', true);
+    async fetchRecipes() {
+      this.loading = true;
+      this.error = null;
 
-      commit("setError", null);
       try {
-        const url = `https://api.api-ninjas.com/v1/recipe?query=${state.query}`; 
-        const options = {
-          method: 'GET',
-          headers: { 'X-Api-Key': 'ALvWHZLDAdySJBsa9V2e0A==5fAkils1kXZmvXVB'},
-          contentType: 'application/json',
-        };
-        const response = await fetch(url, options);
-
+        const response = await fetch(`http://localhost:8080/api/v1/recipes?search=${this.query.trim()}`);
         if (!response.ok) {
           throw new Error(`Ошибка ${response.status}: ${response.statusText}`);
         }
+
         const data = await response.json();
+
         if (Array.isArray(data) && data.length) {
-          commit("setRecipes", data);
+          this.recipes = data;
         } else {
-          commit("setRecipes", []);
-          commit("setError", "Рецепты не найдены");
+          this.recipes = [];
+          this.error = "Рецепты не найдены";
         }
-      }catch (error) {
-        commit('setError', 'Ошибка при загрузке рецептов');
+
+      } catch (error) {
+        this.error = "Ошибка при загрузке рецептов";
       } finally {
-        commit('setLoading', false);
+        this.loading = false;
       }
-    },
-    updateQuery({ commit, dispatch }, query) { 
-      commit('setQuery', query);
-      dispatch('fetchRecipes'); 
     }
-  },
-  getters: {
-    recipes: (state) => state.recipes,
-    isLoading: (state) => state.loading,
-    error: (state) => state.error,
-    query: (state) => state.query,
   }
 });
