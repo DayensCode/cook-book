@@ -1,6 +1,6 @@
 <template>
   <div class="search flex">
-    <el-input class="search-input" v-model="searchQuery" type="text" @keyup.enter="searchRecipes" placeholder="Например, рецепты вторых блюд ..." clearable />
+    <el-input class="search-input" v-model="searchQuery" type="text" @keyup.enter="searchRecipes" placeholder="Например, рецепты вторых блюд" clearable />
     <el-button class="btn-light-green" @click="searchRecipes" :disabled="!searchQuery.trim()">Найти</el-button>
   </div>
   <div class="switchers" v-if="$route.path === '/saved-recepies'">

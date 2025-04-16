@@ -13,15 +13,15 @@ import { defineProps, defineEmits } from 'vue'
 const emit = defineEmits(['close'])
 
 const props = defineProps({
-  onClose: {
-    type: Function,
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    default: () => {}
+  handleClose: {
+    type: Function
   }
 })
 
 const handleClose = () => {
-  props.onClose()
+  if (props.handleClose) {
+    props.handleClose()
+  }
   emit('close')
 }
 </script>

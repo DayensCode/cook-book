@@ -2,19 +2,8 @@
   <Carousel :items-to-show="3.2" :wrap-around="true" :gap="3">
     <Slide v-for="slide in slides" :key="slide.id">
       <div class="slide">
-        <div class="like-container" @click="toggleLike(slide.id)">
-          <SvgIcon
-            v-if="globalState.isAuthorized"
-            :class="slide.isLiked ? 'like-fill' : 'like'"
-            :name="slide.isLiked ? 'like-fill' : 'like'"
-          />
-        </div>
-        <h3>Сырники из творога</h3>
-        <p class="description">
-          Сырники классические — одно из самых простых блюд, с которых многие
-          начинают знакомство с кулинарией. Это настоящая классика жанра,
-          которая удается всем и всегда!
-        </p>
+        <h3>{{ slide.title }}</h3>
+        <p class="description">{{ slide.description }}</p>
       </div>
     </Slide>
 
@@ -24,43 +13,12 @@
   </Carousel>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from "vue";
+<script lang="ts" setup>
+import { ref } from "vue";
 import { Carousel, Slide, Navigation } from "vue3-carousel";
-import SvgIcon from "./SvgIcon.vue";
+import { SlideItem, ISlideItem } from "@/const/slides";
 
-interface ISlideItem {
-  id: number;
-  isLiked: boolean;
-}
-
-export default defineComponent({
-  name: "TheSlider",
-  components: {
-    Carousel,
-    Slide,
-    Navigation,
-    SvgIcon,
-  },
-  inject: ["globalState"],
-  setup() {
-    const slides = ref<ISlideItem[]>(
-      Array.from({ length: 10 }, (_, i) => ({ id: i, isLiked: false }))
-    );
-
-    const toggleLike = (id: number) => {
-      const slide = slides.value.find((s) => s.id === id);
-      if (slide) {
-        slide.isLiked = !slide.isLiked;
-      }
-    };
-
-    return {
-      slides,
-      toggleLike,
-    };
-  },
-});
+const slides = ref<ISlideItem[]>(SlideItem);
 </script>
 
 <style lang="scss" scoped>
@@ -87,20 +45,6 @@ export default defineComponent({
     margin-bottom: 24px;
     position: relative;
     z-index: 1;
-  }
-
-  .like-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 1;
-    cursor: pointer;
-
-    .like,
-    .like-fill {
-      width: 18px;
-      height: 16px;
-    }
   }
 
   .description {

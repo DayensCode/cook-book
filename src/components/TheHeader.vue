@@ -8,7 +8,7 @@
       <el-input
         v-model="query"
         class="search-input"
-        placeholder="Например, рецепты вторых блюд ..."
+        placeholder="Искать в CookBook"
         clearable
         @clear="searchRecipes"
         @keyup.enter="searchRecipes"

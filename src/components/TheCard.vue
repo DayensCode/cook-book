@@ -4,7 +4,10 @@
       <div class="description__top">
         <div class="category background">Категория: {{ category }}</div>
         <div class="sub-info">
-          <div class="background">222</div>
+          <div class="background">
+            <SvgIcon class="to-save" name="to-save" />
+            222
+          </div>
           <div class="background">
             <SvgIcon class="clock" name="clock" />
             <span>{{ formattedTime }}</span>
@@ -83,7 +86,7 @@ const formattedTime = computed(() => {
       }
     }
 
-    .clock {
+    .clock, .to-save {
       width: 17px;
       height: 17px;
     }
