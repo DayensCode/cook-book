@@ -21,10 +21,10 @@
       </el-input>
 
       <div>
-        <el-dropdown v-if="globalState.isAuthorized" trigger="hover">
+        <el-dropdown v-if="isAuthorized" trigger="hover">
           <router-link to="/account" class="user-info flex">
             <SvgIcon class="account" name="account" />
-            <span>{{ globalState.user.username }}</span>
+            <span>{{ username }}</span>
           </router-link>
           <template #dropdown>
             <el-dropdown-menu>
@@ -47,7 +47,7 @@
           </template>
         </el-dropdown>
 
-        <router-link v-if="!globalState.isAuthorized" to="/authorization" class="flex">
+        <router-link v-if="!isAuthorized" to="/authorization" class="flex">
           <SvgIcon class="login" name="login" />
           <p>Войти</p>
         </router-link>
@@ -60,17 +60,18 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from "vue";
 import { storeToRefs } from "pinia";
 import { useRecipeStore } from "@/store/index";
+import { useAuthStore } from "@/store/auth";
 
 import Logout from "./Logout.vue";
 import SvgIcon from "./SvgIcon.vue";
 
-const globalState = inject("globalState") as any;
-
 const recipeStore = useRecipeStore();
 const { query } = storeToRefs(recipeStore);
+
+const authStore = useAuthStore();
+const { isAuthorized, username } = storeToRefs(authStore);
 
 function searchRecipes() {
   recipeStore.fetchRecipes();

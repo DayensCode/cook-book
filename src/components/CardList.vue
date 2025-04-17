@@ -175,6 +175,7 @@ import { ElNotification } from 'element-plus';
 import type { FormRules } from 'element-plus';
 import { storeToRefs } from 'pinia';
 import { useRecipeStore } from '@/store/index';
+import { useAuthStore } from '@/store/auth';
 
 import TheCard from "./TheCard.vue";
 import BaseModal from "./BaseModal.vue";
@@ -182,6 +183,8 @@ import SvgIcon from './SvgIcon.vue';
 
 const recipeStore = useRecipeStore();
 const { recipes, error, loading } = storeToRefs(recipeStore);
+const authStore = useAuthStore();
+const { token } = storeToRefs(authStore);
 
 const asideTitle = ref('');
 const isModalOpen = ref(false);
@@ -340,7 +343,7 @@ const submitForm = async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImFkbWluIiwiZXhwIjoxNzQ0ODA5NjM2fQ.kERmPQo7Y1i6Y5XpjLrnNE8nfd1VnWqaYw-WZ8bRnNY`,
+        Authorization: `Bearer ${token.value}`,
       },
       body: JSON.stringify(payload),
     });
@@ -475,12 +478,6 @@ onMounted(() => {
 .modal-top {
   justify-content: flex-start;
   gap: 80px;
-}
-
-.go-back {
-  width: 26px;
-  height: 26px;
-  cursor: pointer;
 }
 
 .modal-title {

@@ -2,16 +2,15 @@
   <router-view />
 </template>
 
-<script lang="ts">
-import { defineComponent, inject } from 'vue'
+<script setup lang="ts">
+import { onMounted } from 'vue';
 
-export default defineComponent({
-  name: 'App',
-  setup() {
-    const globalState = inject("globalState");
-    return { globalState };
-  },
-})
+import { useAuthStore } from '@/store/auth';
+const authStore = useAuthStore();
+
+onMounted(() => {
+  authStore.loadUserFromStorage();
+});
 </script>
 
 <style>

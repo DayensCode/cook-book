@@ -1,26 +1,21 @@
 <template>
-  <div @click="logout" class="flex">
+  <div @click="handleLogout" class="flex">
     <SvgIcon class="logout" name="logout"/>
     <span>Выйти</span>
   </div>
 </template>
   
-<script>
-import { logout } from "@/helpers/authorization";
+<script setup lang="ts">
+import { useAuthStore } from '@/store/auth';
+import { useRouter } from 'vue-router';
 import SvgIcon from "./SvgIcon.vue";
 
-export default {
-  components: { SvgIcon },
-  inject: ["globalState"],
-  methods: {
-    logout() {
-      logout();
-      this.globalState.isAuthorized = false;
-      this.globalState.isAdmin = false;
-      this.globalState.user = null;
-      alert("Вы вышли из аккаунта");
-    },
-  },
+const authStore = useAuthStore();
+const router = useRouter();
+
+const handleLogout = () => {
+  authStore.logout();
+  router.push('/');
 };
 </script>
 

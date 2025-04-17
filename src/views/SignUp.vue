@@ -1,159 +1,144 @@
 <template>
-	<div class="layout">
-		<button class="back-btn" @click="goBack">
-			<p>Вернуться назад</p>
-			<SvgIcon class="arrow-back" name="arrow-back" />
-		</button>
-		<el-form ref="formRef" require-asterisk-position="right" :rules="rules" :model="formData" class="form-layout">
-			<el-form-item label="Имя" prop="first_name">
-				<CustomInput v-model="formData.first_name" />
-			</el-form-item>
-			<el-form-item label="Фамилия" prop="last_name">
-				<CustomInput v-model="formData.last_name" />
-			</el-form-item>
-			<el-form-item label="Отчество" prop="third_name">
-				<CustomInput v-model="formData.third_name" />
-			</el-form-item>
-			<el-form-item label="Электронная почта" prop="email">
-				<CustomInput v-model="formData.email" />
+	<div class="layout flex">
+		<el-form ref="formRef" hide-required-asterisk :rules="rules" :model="formData" class="form-layout">
+      <div class="flex auth-top">
+        <SvgIcon class="go-back" name="go-back" @click="goBack" />
+        <h2>Добро пожаловать!</h2>
+      </div>
+			<el-form-item label="Имя" prop="name">
+				<CustomInput v-model="formData.name" />
 			</el-form-item>
 			<el-form-item label="Пароль" prop="password">
 				<CustomInput v-model="formData.password" type="password" />
 			</el-form-item>
-			<el-form-item label="Пароль повторно" prop="passwordCheck">
+			<el-form-item label="Повторный ввод пароля" prop="passwordCheck">
 				<CustomInput v-model="formData.passwordCheck" type="password" />
 			</el-form-item>
 
 			<el-button class="btn-light-green" type="primary" @click="submitForm">Зарегистрироваться</el-button>
+      <p class="bottom-info">Уже зарегестрированы? <router-link to="/authorization">Войти</router-link></p>
 		</el-form>
 	</div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { ref, reactive } from 'vue';
+import type { FormInstance, FormRules } from 'element-plus';
+import { useRouter } from 'vue-router';
+
 import CustomInput from '@/components/CustomInput.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
-import { getCurrentUser, loginUser, registerUser } from '@/helpers/authorization';
 
-export default {
-	components: {
-		CustomInput,
-		SvgIcon,
-	},
-	data() {
-		return {
-			formRef: null,
-			formData: {
-				email: '',
-				first_name: '',
-				last_name: '',
-				third_name: '',
-				password: '',
-				passwordCheck: '',
-			},
+const router = useRouter();
 
-			rules: {
-				email: [
-					{ required: true, message: 'Введите email', trigger: 'change' },
-					{ type: 'email', message: 'Некорректный email', trigger: 'change' }
-				],
-				password: [
-					{ required: true, validator: this.validatePass, trigger: 'change' },
-				],
-				passwordCheck: [
-					{ required: true, validator: this.validatePassCheck, trigger: 'change' },
-				],
-			},
-		};
-	},
+const formRef = ref<FormInstance | null>(null);
+const formData = reactive({
+	name: '',
+	password: '',
+	passwordCheck: '',
+});
 
-	inject: ["globalState"],
-	methods: {
-		validatePass(rule, value, callback) {
-			if (value === '') {
-				callback(new Error('Введите пароль повторно'))
-			}
-			else if (/[\u0400-\u04FF]/.test(value)) callback(new Error('Пароль не может содержать кириллические символы'));
-			else if (!/[a-z]/.test(value)) callback(new Error('Пароль должен содержать латинские буквы в нижнем регистре'));
-			else if (!/[A-Z]/.test(value)) callback(new Error('Пароль должен содержать латинские буквы в верхнем регистре'));
-			else if (!/[0-9]/.test(value)) callback(new Error('Пароль должен содержать минимум одну цифру'));
-			else if (value.length < 8) callback(new Error('Пароль должен быть не менее 8 символов'));
-			else callback();
-		},
-		validatePassCheck(rule, value, callback) {
-			if (value === '') {
-				callback(new Error('Введите пароль повторно'));
-			} else if (value !== this.formData.password) {
-				callback(new Error('Пароли не совпадают'));
-			} else {
-				callback();
-			}
-		},
-		goBack() {
-			window.history.back();
-		},
-		submitForm() {
-			this.$refs.formRef.validate((valid) => {
-				if (valid) {
-					if (registerUser(this.formData.email, this.formData.email, this.formData.password, this.formData.first_name, this.formData.last_name, this.formData.third_name)) {
-						if (loginUser(this.formData.email, this.formData.email, this.formData.password, this.formData.first_name, this.formData.last_name, this.formData.third_name)) {
-							const user = getCurrentUser();
-							this.globalState.isAuthorized = true;
-							this.globalState.isAdmin = user?.isAdmin || false;
-						}
-						alert("Вы успешно зарегистрированы!");
-						this.$router.push("/authorization");
-
-					} else {
-						alert("Пользователь уже существует!");
-					}
-				} else {
-					alert("Ошибка валидации");
-				}
-			});
-
-		},
+const validateName = (rule: any, value: string, callback: (error?: Error) => void) => {
+	if (value === '') {
+		callback(new Error('Введите имя'));
+	} else if (value.length < 5) {
+		callback(new Error('Имя должно быть не менее 5 символов'));
+	} else {
+		callback();
 	}
+};
+
+const validatePass = (rule: any, value: string, callback: (error?: Error) => void) => {
+	if (value === '') {
+		callback(new Error('Введите пароль'));
+	} else if (value.length < 8) {
+		callback(new Error('Пароль должен содержать минимум 8 символов'));
+	} else {
+		callback();
+	}
+};
+
+const validatePassCheck = (rule: any, value: string, callback: (error?: Error) => void) => {
+	if (value === '') {
+		callback(new Error('Введите пароль повторно'));
+	}  else if (value !== formData.password) {
+		callback(new Error('Пароли не совпадают'));
+	} else {
+		callback();
+	}
+};
+
+const rules: FormRules = {
+	name: [{ required: true, validator: validateName, trigger: 'change' }],
+	password: [{ required: true, validator: validatePass, trigger: 'change' }],
+	passwordCheck: [{ required: true, validator: validatePassCheck, trigger: 'change' }],
+};
+
+const submitForm = async () => {
+  if (!formRef.value) return;
+
+  formRef.value.validate(async (valid) => {
+    if (valid) {
+      try {
+        const response = await fetch('http://localhost:8080/api/v1/auth/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            login: formData.name,
+            password: formData.password,
+          }),
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          alert(error.detail || 'Ошибка регистрации');
+          return;
+        }
+
+        router.push('/authorization');
+      } catch (err) {
+        console.error(err);
+        alert('Пользователь уже существует!');
+      }
+    } else {
+      alert('Ошибка валидации');
+    }
+  });
+};
+
+const goBack = () => {
+	window.history.back();
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .layout {
 	min-height: 48rem;
-	height: 100%;
-	display: flex;
+	height: 100vh;
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
+  background-color: #E3CBBC;
 }
 
 .form-layout {
-	width: 300px;
+	width: 352px;
 	display: flex;
 	flex-direction: column;
 	gap: 10px;
-	color: black;
-	background-color: white;
-
-	border: 1rem solid #e3cbbc;
-	border-radius: 1rem;
+	color: #2F2F2F;
 	padding: 2rem;
-}
 
-.arrow-back {
-	width: 50px;
-	height: 30px;
-	color: white;
-}
+  .auth-top {
+    justify-content: flex-start;
+    gap: 30px;
+    color: #2F2F2F;
+  }
 
-.back-btn {
-	cursor: pointer;
-	color: white;
-	border: 3px #e3cbbc solid;
-	background-color: #e3cbbc;
-	border-radius: 1rem;
-	padding: 10px;
-	position: absolute;
-	left: 1rem;
-	top: 1rem;
+  .bottom-info {
+    text-align: center;
+    color: #8B8B8B;
+    font-size: 16px;
+  }
 }
 </style>
