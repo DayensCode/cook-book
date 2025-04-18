@@ -5,6 +5,9 @@ interface State {
   loading: boolean;
   error: string | null;
   query: string;
+  // hashtags: number[];
+  selectedCategory: string;
+  selectedCuisine: string;
 }
 
 export const useRecipeStore = defineStore("recipeStore", {
@@ -13,6 +16,9 @@ export const useRecipeStore = defineStore("recipeStore", {
     loading: false,
     error: null,
     query: "",
+    // hashtags: [],
+    selectedCategory: "",
+    selectedCuisine: "",
   }),
   actions: {
     async fetchRecipes() {
@@ -20,7 +26,25 @@ export const useRecipeStore = defineStore("recipeStore", {
       this.error = null;
 
       try {
-        const response = await fetch(`http://localhost:8080/api/v1/recipes?search=${this.query.trim()}`);
+        const params = new URLSearchParams();
+
+        if (this.query.trim()) {
+          params.append("search", this.query.trim());
+        }
+
+        // if (this.hashtags.length > 0) {
+        //   params.append("hashtags", String(this.hashtags[0]));
+        // }
+
+        if (this.selectedCategory !== "") {
+          params.append("dish_types", this.selectedCategory);
+        }
+
+        if (this.selectedCuisine !== "") {
+          params.append("cuisines", this.selectedCuisine);
+        }
+
+        const response = await fetch(`http://localhost:8080/api/v1/recipes?${params.toString()}`);
         if (!response.ok) {
           throw new Error(`Ошибка ${response.status}: ${response.statusText}`);
         }

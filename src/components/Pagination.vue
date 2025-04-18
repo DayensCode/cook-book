@@ -64,6 +64,13 @@ const visiblePages = computed(() => {
   align-items: center;
   justify-content: center;
   gap: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 10px 38px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: 0;
 }
 
 .page-buttons {
@@ -72,25 +79,26 @@ const visiblePages = computed(() => {
 }
 
 .page {
-  color: #decabd;
+  color: #e3cbbc;
   font-size: 24px;
   border: none;
   background-color: transparent;
   font-weight: 600;
+  transition: all .3s linear;
 }
 
 .page.active {
-  color: #2f2222;
+  color: #837B7A;
 }
 
 .page:not(:disabled):hover,
 .arrow:not(.disabled):hover {
-  color: #2f2222;
+  color: #837B7A;
   cursor: pointer;
 }
 
 .page.active:hover {
-  color: #2f2222;
+  color: #837B7A;
   cursor: default;
 }
 

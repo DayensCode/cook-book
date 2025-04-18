@@ -44,12 +44,19 @@ const slides = ref<ISlideItem[]>(SlideItem);
   h3 {
     margin-bottom: 24px;
     position: relative;
-    z-index: 1;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
   }
 
   .description {
     position: relative;
-    z-index: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
   }
 }
 </style>

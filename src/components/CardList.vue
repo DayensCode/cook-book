@@ -1,18 +1,63 @@
 <template>
   <div class="container">
     <div class="content">
-      <div class="aside">
-        <h3>добавь свой рецепт</h3>
-        <input type="text" placeholder="Введите название" v-model="asideTitle" />
-        <button @click="openModal">Создать</button>
+      <div>
+        <div class="filter-box">
+          <el-select v-model="selectedCategory" placeholder="Категория">
+            <el-option
+              v-for="option in categoryOptions"
+              :key="option.value"
+              :label="option.label"
+              :value="option.value"
+            />
+          </el-select>
+
+          <el-select v-model="selectedCuisine" placeholder="Национальная кухня">
+            <el-option
+              v-for="option in cuisineOptions"
+              :key="option.value"
+              :label="option.label"
+              :value="option.value"
+            />
+          </el-select>
+
+          <el-checkbox v-model="filters.vegetarian">Вегетарианский</el-checkbox>
+          <el-checkbox v-model="filters.fast">Быстрый</el-checkbox>
+          <el-checkbox v-model="filters.home">Домашний</el-checkbox>
+          <el-checkbox v-model="filters.spicy">Острый</el-checkbox>
+          <el-checkbox v-model="filters.healthy">Здоровый</el-checkbox>
+          <el-checkbox v-model="filters.seasonal">Сезонный</el-checkbox>
+
+          <div class="label">Время готовки (мин):</div>
+
+          <div class="time-range">
+            <el-input-number v-model="timeRange[0]" :min="0" :max="timeRange[1]" />
+            <span>–</span>
+            <el-input-number v-model="timeRange[1]" :min="timeRange[0]" :max="200" />
+          </div>
+
+          <el-slider
+            v-model="timeRange"
+            range
+            :min="0"
+            :max="200"
+            class="time-slider"
+          />
+        </div>
+
+        <div v-if="isAuthorized" class="aside">
+          <h3>добавь свой рецепт</h3>
+          <input type="text" placeholder="Введите название" v-model="asideTitle" />
+          <button @click="openModal">Создать</button>
+        </div>
       </div>
 
       <div class="card-list">
         <div v-if="loading" class="no-value">Загрузка...</div>
         <div v-if="error" class="no-value">{{ error }}</div>
-        <div v-if="recipes?.length">
+        <div v-if="paginatedRecipes.length">
           <TheCard
-            v-for="recipe in recipes"
+            v-for="recipe in paginatedRecipes"
             :key="recipe.id"
             :title="recipe.title"
             :category="recipe.dish_type.name"
@@ -20,6 +65,12 @@
             :time="recipe.cooking_time"
           />
         </div>
+        <Pagination
+          v-if="totalPages > 1"
+          :totalPages="totalPages"
+          :modelValue="currentPage"
+          @update:modelValue="handlePageChange"
+        />
       </div>
     </div>
 
@@ -170,7 +221,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import { ElNotification } from 'element-plus';
 import type { FormRules } from 'element-plus';
 import { storeToRefs } from 'pinia';
@@ -180,15 +231,28 @@ import { useAuthStore } from '@/store/auth';
 import TheCard from "./TheCard.vue";
 import BaseModal from "./BaseModal.vue";
 import SvgIcon from './SvgIcon.vue';
+import Pagination from './Pagination.vue';
 
 const recipeStore = useRecipeStore();
-const { recipes, error, loading } = storeToRefs(recipeStore);
+const { recipes, error, loading, selectedCategory, selectedCuisine } = storeToRefs(recipeStore);
 const authStore = useAuthStore();
-const { token } = storeToRefs(authStore);
+const { token, isAuthorized } = storeToRefs(authStore);
 
 const asideTitle = ref('');
 const isModalOpen = ref(false);
 const step = ref(1);
+const currentPage = ref(1);
+const pageSize = 3;
+const filters = ref({
+  vegetarian: false,
+  fast: false,
+  home: false,
+  spicy: false,
+  healthy: false,
+  seasonal: false
+});
+
+const timeRange = ref<[number, number]>([30, 100]);
 
 interface IRecipeForm {
   title: string;
@@ -224,22 +288,8 @@ const rules: FormRules = {
   instructions: [{ required: true, message: 'Опишите, как приготовить блюдо', trigger: 'blur' }],
 }
 
-const categoryOptions = [
-  { label: 'Основное блюдо', value: '3' },
-  { label: 'Суп', value: '1' },
-  { label: 'Салат', value: '2' },
-  // { label: 'Закуска', value: 'snack' },
-  // { label: 'Выпечка/десерт', value: 'dessert' },
-  // { label: 'Напиток', value: 'drink' },
-];
-
-const cuisineOptions = [
-  { label: 'Итальянская', value: '1' },
-  { label: 'Русская', value: '3' },
-  { label: 'Японская', value: '4' },
-  { label: 'Грузинская', value: '5' },
-  // { label: 'Мексиканская', value: '6' },
-];
+const categoryOptions = ref<{ label: string; value: string }[]>([]);
+const cuisineOptions = ref<{ label: string; value: string }[]>([]);
 
 const availableHashtags = [
   { id: 1, label: 'Вегетарианский' },
@@ -269,6 +319,19 @@ const isCurrentStepValid = computed(() => {
 
   return false;
 });
+
+const totalPages = computed(() => {
+  return Math.ceil(recipes.value.length / pageSize);
+});
+
+const paginatedRecipes = computed(() => {
+  const start = (currentPage.value - 1) * pageSize;
+  return recipes.value.slice(start, start + pageSize);
+});
+
+const handlePageChange = (page: number) => {
+  currentPage.value = page;
+};
 
 const openModal = () => {
   form.value.title = asideTitle.value;
@@ -395,8 +458,51 @@ const submitForm = async () => {
   }
 };
 
-onMounted(() => {
+watch(
+  [selectedCategory, selectedCuisine],
+  () => {
+    recipeStore.fetchRecipes();
+  },
+  { immediate: false }
+);
+
+onMounted(async () => {
   recipeStore.fetchRecipes();
+  try {
+    const response = await fetch('http://localhost:8080/api/v1/recipes/types');
+    const data = await response.json();
+
+    categoryOptions.value = data.map((item: any) => ({
+      label: item.name,
+      value: String(item.id),
+    }));
+  } catch (err) {
+    console.error('Ошибка при загрузке категорий:', err);
+  }
+
+  try {
+    const response = await fetch('http://localhost:8080/api/v1/recipes/cuisines');
+    const data = await response.json();
+
+    cuisineOptions.value = data.map((item: any) => ({
+      label: item.name,
+      value: String(item.id),
+    }));
+  } catch (err) {
+    console.error('Ошибка при загрузке национальных кухонь:', err);
+  }
+
+  try {
+    const response = await fetch('http://localhost:8080/api/v1/recipes/hashtags');
+    const data = await response.json();
+
+    // cuisineOptions.value = data.map((item: any) => ({
+    //   label: item.name,
+    //   value: String(item.id),
+    // }));
+  } catch (err) {
+    console.error('Ошибка при загрузке хэштегов:', err);
+  }
 });
 </script>
 
@@ -408,6 +514,7 @@ onMounted(() => {
 }
 
 .aside {
+  margin-top: 22px;
   padding: 45px 35px 48px;
   height: fit-content;
   border-radius: 18px;
@@ -431,8 +538,8 @@ onMounted(() => {
     text-transform: uppercase;
     white-space: nowrap;
     position: relative;
-    z-index: 2;
     font-size: 18px;
+    text-align: center;
   }
 
   input {
@@ -473,6 +580,31 @@ onMounted(() => {
 
 .card-list {
   flex: 1;
+}
+
+.filter-box {
+  background-color: #e8ccc0;
+  padding: 35px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 250px;
+}
+
+.label {
+  color: #606266;
+  font-size: 14px;
+}
+
+.time-range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.time-slider {
+  margin-top: -10px;
 }
 
 .modal-top {

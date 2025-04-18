@@ -20,9 +20,8 @@ onMounted(() => {
   -moz-osx-font-smoothing: grayscale;
   font-size: 18px;
   color: #fff;
-  background-size: contain;
-  background-image: url("./assets/img/back.png");
-  background-position: center;
+  background-size: cover;
+  background-image: url("./assets/img/pattern.png");
   min-height: 100vh;
 }
 </style>

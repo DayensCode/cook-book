@@ -4,7 +4,7 @@
       <div class="description__top">
         <div class="category background">Категория: {{ category }}</div>
         <div class="sub-info">
-          <div class="background">
+          <div v-if="isAuthorized" class="background">
             <SvgIcon class="to-save" name="to-save" />
             222
           </div>
@@ -24,8 +24,13 @@
 
 <script setup lang="ts">
 import { defineProps, computed } from 'vue';
+import { storeToRefs } from 'pinia';
+import { useAuthStore } from '@/store/auth';
 
 import SvgIcon from "./SvgIcon.vue";
+
+const authStore = useAuthStore();
+const { isAuthorized } = storeToRefs(authStore);
 
 const props = defineProps<{
   title: string
