@@ -21,12 +21,16 @@
             />
           </el-select>
 
-          <el-checkbox v-model="filters.vegetarian">Вегетарианский</el-checkbox>
-          <el-checkbox v-model="filters.fast">Быстрый</el-checkbox>
-          <el-checkbox v-model="filters.home">Домашний</el-checkbox>
-          <el-checkbox v-model="filters.spicy">Острый</el-checkbox>
-          <el-checkbox v-model="filters.healthy">Здоровый</el-checkbox>
-          <el-checkbox v-model="filters.seasonal">Сезонный</el-checkbox>
+          <el-checkbox-group v-model="selectedHashtags" class="hashtags-group">
+            <el-checkbox
+              v-for="tag in hashtags"
+              :key="tag.id"
+              :label="tag.id"
+              class="hashtag-checkbox"
+            >
+              {{ tag.name }}
+            </el-checkbox>
+          </el-checkbox-group>
 
           <div class="label">Время готовки (мин):</div>
 
@@ -160,7 +164,7 @@
           <el-form-item label="Хэштеги">
             <div class="hashtag-wrapper">
               <el-button
-                v-for="tag in availableHashtags"
+                v-for="tag in hashtags"
                 :key="tag.id"
                 :type="form.hashtags.includes(tag.id) ? 'success' : 'info'"
                 @click="toggleHashtag(tag.id)"
@@ -168,7 +172,7 @@
                 size="small"
                 class="hashtag-button"
               >
-                # {{ tag.label }}
+                {{ tag.name }}
               </el-button>
             </div>
           </el-form-item>
@@ -234,7 +238,7 @@ import SvgIcon from './SvgIcon.vue';
 import Pagination from './Pagination.vue';
 
 const recipeStore = useRecipeStore();
-const { recipes, error, loading, selectedCategory, selectedCuisine } = storeToRefs(recipeStore);
+const { recipes, error, loading, selectedCategory, selectedCuisine, selectedHashtags } = storeToRefs(recipeStore);
 const authStore = useAuthStore();
 const { token, isAuthorized } = storeToRefs(authStore);
 
@@ -243,14 +247,6 @@ const isModalOpen = ref(false);
 const step = ref(1);
 const currentPage = ref(1);
 const pageSize = 3;
-const filters = ref({
-  vegetarian: false,
-  fast: false,
-  home: false,
-  spicy: false,
-  healthy: false,
-  seasonal: false
-});
 
 const timeRange = ref<[number, number]>([30, 100]);
 
@@ -290,15 +286,7 @@ const rules: FormRules = {
 
 const categoryOptions = ref<{ label: string; value: string }[]>([]);
 const cuisineOptions = ref<{ label: string; value: string }[]>([]);
-
-const availableHashtags = [
-  { id: 1, label: 'Вегетарианский' },
-  { id: 2, label: 'Быстрый' },
-  { id: 3, label: 'Домашний' },
-  { id: 4, label: 'Острый' },
-  { id: 5, label: 'Здоровый' },
-  { id: 6, label: 'Сезонный' },
-];
+const hashtags = ref<{ name: string; id: number }[]>([]);
 
 const isCurrentStepValid = computed(() => {
   if (step.value === 1) {
@@ -459,7 +447,7 @@ const submitForm = async () => {
 };
 
 watch(
-  [selectedCategory, selectedCuisine],
+  [selectedCategory, selectedCuisine, selectedHashtags],
   () => {
     recipeStore.fetchRecipes();
   },
@@ -495,11 +483,7 @@ onMounted(async () => {
   try {
     const response = await fetch('http://localhost:8080/api/v1/recipes/hashtags');
     const data = await response.json();
-
-    // cuisineOptions.value = data.map((item: any) => ({
-    //   label: item.name,
-    //   value: String(item.id),
-    // }));
+    hashtags.value = data
   } catch (err) {
     console.error('Ошибка при загрузке хэштегов:', err);
   }
@@ -595,6 +579,15 @@ onMounted(async () => {
 .label {
   color: #606266;
   font-size: 14px;
+}
+
+.hashtags-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.hashtag-checkbox {
+  margin-bottom: 13.5px;
 }
 
 .time-range {

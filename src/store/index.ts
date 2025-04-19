@@ -5,7 +5,7 @@ interface State {
   loading: boolean;
   error: string | null;
   query: string;
-  // hashtags: number[];
+  selectedHashtags: number[];
   selectedCategory: string;
   selectedCuisine: string;
 }
@@ -16,7 +16,7 @@ export const useRecipeStore = defineStore("recipeStore", {
     loading: false,
     error: null,
     query: "",
-    // hashtags: [],
+    selectedHashtags: [],
     selectedCategory: "",
     selectedCuisine: "",
   }),
@@ -32,9 +32,11 @@ export const useRecipeStore = defineStore("recipeStore", {
           params.append("search", this.query.trim());
         }
 
-        // if (this.hashtags.length > 0) {
-        //   params.append("hashtags", String(this.hashtags[0]));
-        // }
+        if (this.selectedHashtags.length > 0) {
+          this.selectedHashtags.forEach((id) => {
+            params.append("hashtags", id.toString());
+          });
+        }
 
         if (this.selectedCategory !== "") {
           params.append("dish_types", this.selectedCategory);
