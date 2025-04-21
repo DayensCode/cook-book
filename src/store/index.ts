@@ -8,6 +8,7 @@ interface State {
   selectedHashtags: number[];
   selectedCategory: string;
   selectedCuisine: string;
+  selectedMaxTime: number | null;
 }
 
 export const useRecipeStore = defineStore("recipeStore", {
@@ -19,6 +20,7 @@ export const useRecipeStore = defineStore("recipeStore", {
     selectedHashtags: [],
     selectedCategory: "",
     selectedCuisine: "",
+    selectedMaxTime: null,
   }),
   actions: {
     async fetchRecipes() {
@@ -44,6 +46,10 @@ export const useRecipeStore = defineStore("recipeStore", {
 
         if (this.selectedCuisine !== "") {
           params.append("cuisines", this.selectedCuisine);
+        }
+
+        if (this.selectedMaxTime) {
+          params.append("max_cooking_time", this.selectedMaxTime.toString());
         }
 
         const response = await fetch(`http://localhost:8080/api/v1/recipes?${params.toString()}`);

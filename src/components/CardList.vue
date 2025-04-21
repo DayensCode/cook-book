@@ -1,8 +1,9 @@
 <template>
   <div class="container">
     <div class="content">
-      <div>
+      <div class="left-widgets">
         <div class="filter-box">
+          <h3>параметры рецептов</h3>
           <el-select v-model="selectedCategory" placeholder="Категория">
             <el-option
               v-for="option in categoryOptions"
@@ -32,17 +33,11 @@
             </el-checkbox>
           </el-checkbox-group>
 
-          <div class="label">Время готовки (мин):</div>
-
-          <div class="time-range">
-            <el-input-number v-model="timeRange[0]" :min="0" :max="timeRange[1]" />
-            <span>–</span>
-            <el-input-number v-model="timeRange[1]" :min="timeRange[0]" :max="200" />
-          </div>
-
+          <div class="label">Время готовки максимум: {{ selectedMaxTime }} (мин)</div>
           <el-slider
-            v-model="timeRange"
-            range
+            :model-value="selectedMaxTime"
+            @change="handleMaxTimeChange"
+            @input="selectedMaxTime = $event"
             :min="0"
             :max="200"
             class="time-slider"
@@ -205,7 +200,7 @@
 
           <el-form-item>
             <el-button class="submit-button" type="success" @click="submitForm" :disabled="!isCurrentStepValid">
-              Отправить на модерацию
+              Создать
             </el-button>
           </el-form-item>
         </template>
@@ -238,7 +233,7 @@ import SvgIcon from './SvgIcon.vue';
 import Pagination from './Pagination.vue';
 
 const recipeStore = useRecipeStore();
-const { recipes, error, loading, selectedCategory, selectedCuisine, selectedHashtags } = storeToRefs(recipeStore);
+const { recipes, error, loading, selectedCategory, selectedCuisine, selectedHashtags, selectedMaxTime } = storeToRefs(recipeStore);
 const authStore = useAuthStore();
 const { token, isAuthorized } = storeToRefs(authStore);
 
@@ -247,8 +242,6 @@ const isModalOpen = ref(false);
 const step = ref(1);
 const currentPage = ref(1);
 const pageSize = 3;
-
-const timeRange = ref<[number, number]>([30, 100]);
 
 interface IRecipeForm {
   title: string;
@@ -316,6 +309,11 @@ const paginatedRecipes = computed(() => {
   const start = (currentPage.value - 1) * pageSize;
   return recipes.value.slice(start, start + pageSize);
 });
+
+const handleMaxTimeChange = (value: number) => {
+  selectedMaxTime.value = value;
+  recipeStore.fetchRecipes();
+}
 
 const handlePageChange = (page: number) => {
   currentPage.value = page;
@@ -497,6 +495,16 @@ onMounted(async () => {
   gap: 40px;
 }
 
+.left-widgets {
+  h3 {
+    text-transform: uppercase;
+    white-space: nowrap;
+    position: relative;
+    font-size: 18px;
+    text-align: center;
+  }
+}
+
 .aside {
   margin-top: 22px;
   padding: 45px 35px 48px;
@@ -516,14 +524,6 @@ onMounted(async () => {
     right: 0;
     background-color: rgba(213, 177, 155, 0.65);
     border-radius: 18px;
-  }
-
-  h3 {
-    text-transform: uppercase;
-    white-space: nowrap;
-    position: relative;
-    font-size: 18px;
-    text-align: center;
   }
 
   input {
@@ -574,6 +574,10 @@ onMounted(async () => {
   flex-direction: column;
   gap: 16px;
   width: 250px;
+
+  h3 {
+    margin-bottom: 11px;
+  }
 }
 
 .label {
@@ -588,12 +592,6 @@ onMounted(async () => {
 
 .hashtag-checkbox {
   margin-bottom: 13.5px;
-}
-
-.time-range {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 .time-slider {
