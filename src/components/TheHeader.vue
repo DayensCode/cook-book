@@ -181,4 +181,13 @@ function searchRecipes() {
 .el-dropdown-menu__item:not(.is-disabled):hover {
   background-color: #C9B5A8 !important;
 }
+
+.el-dropdown-menu {
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+}
+
+.el-popper {
+  top: 80px !important;
+}
 </style>
