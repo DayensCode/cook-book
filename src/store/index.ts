@@ -40,11 +40,11 @@ export const useRecipeStore = defineStore("recipeStore", {
           });
         }
 
-        if (this.selectedCategory !== "") {
+        if (this.selectedCategory) {
           params.append("dish_types", this.selectedCategory);
         }
 
-        if (this.selectedCuisine !== "") {
+        if (this.selectedCuisine) {
           params.append("cuisines", this.selectedCuisine);
         }
 

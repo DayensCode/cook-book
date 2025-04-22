@@ -27,7 +27,7 @@
             <span>{{ username }}</span>
           </router-link>
           <template #dropdown>
-            <el-dropdown-menu>
+            <el-dropdown-menu class="menu-list">
               <el-dropdown-item>
                 <router-link to="/saved-recepies" class="flex">
                   <SvgIcon name="favorite" />
@@ -187,7 +187,11 @@ function searchRecipes() {
   border-top-right-radius: 0px !important;
 }
 
-.el-popper {
+.el-popper:has(.menu-list) {
   top: 80px !important;
+}
+
+.el-popper {
+  font-family: Montserrat, Helvetica, Arial, sans-serif;
 }
 </style>

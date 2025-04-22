@@ -4,7 +4,7 @@
       <div class="left-widgets">
         <div class="filter-box">
           <h3>параметры рецептов</h3>
-          <el-select v-model="selectedCategory" placeholder="Категория">
+          <el-select v-model="selectedCategory" placeholder="Категория" clearable>
             <el-option
               v-for="option in categoryOptions"
               :key="option.value"
@@ -13,7 +13,7 @@
             />
           </el-select>
 
-          <el-select v-model="selectedCuisine" placeholder="Национальная кухня">
+          <el-select v-model="selectedCuisine" placeholder="Национальная кухня" clearable>
             <el-option
               v-for="option in cuisineOptions"
               :key="option.value"
@@ -102,18 +102,6 @@
             </el-form-item>
           </div>
 
-          <el-form-item label="Фото готового блюда" class="upload-field">
-            <el-upload
-              drag
-              action="#"
-              :auto-upload="false"
-              v-model:file-list="form.image"
-              accept="image/*"
-            >
-              <div class="el-upload__text">Перетащите файл сюда <br /><em>или выберите</em></div>
-            </el-upload>
-          </el-form-item>
-
           <el-form-item label="Категория" prop="category">
             <el-select v-model="form.category" placeholder="Выберите категорию">
               <el-option
@@ -134,6 +122,18 @@
                 :value="option.value"
               />
             </el-select>
+          </el-form-item>
+
+          <el-form-item label="Фото готового блюда" class="upload-field">
+            <el-upload
+              drag
+              action="#"
+              :auto-upload="false"
+              v-model:file-list="form.image"
+              accept="image/*"
+            >
+              <div class="el-upload__text">Перетащите файл сюда <br /><em>или выберите</em></div>
+            </el-upload>
           </el-form-item>
 
           <el-form-item>
@@ -425,7 +425,7 @@ const submitForm = async () => {
 
     ElNotification({
       title: 'Готово!',
-      message: 'Рецепт успешно отправлен на модерацию.',
+      message: 'Рецепт успешно создан.',
       type: 'success',
       position: 'bottom-right',
     });
@@ -437,7 +437,7 @@ const submitForm = async () => {
     console.error(error);
     ElNotification({
       title: 'Ошибка',
-      message: 'Не удалось отправить рецепт. Попробуйте позже.',
+      message: 'Не удалось создать рецепт. Попробуйте позже.',
       type: 'error',
       position: 'bottom-right',
     });
