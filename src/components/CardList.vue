@@ -226,6 +226,7 @@ import type { FormRules } from 'element-plus';
 import { storeToRefs } from 'pinia';
 import { useRecipeStore } from '@/store/index';
 import { useAuthStore } from '@/store/auth';
+import { recipeService } from '@/service/recipeService';
 
 import TheCard from "./TheCard.vue";
 import BaseModal from "./BaseModal.vue";
@@ -376,52 +377,19 @@ const handleCloseForm = () => {
 const submitForm = async () => {
   const totalMinutes = form.value.hours * 60 + form.value.minutes;
 
+  const payload = {
+    title: form.value.title,
+    cooking_time: totalMinutes,
+    dish_type_id: +form.value.category,
+    cuisine_id: +form.value.cuisine,
+    content: `Ингредиенты: ${form.value.ingredients
+      .map(item => item.toLowerCase())
+      .join(', ')}. ${form.value.instructions.join('. ')}`,
+    hashtags: form.value.hashtags,
+  };
+
   try {
-    const payload = {
-      title: form.value.title,
-      cooking_time: totalMinutes,
-      dish_type_id: +form.value.category,
-      cuisine_id: +form.value.cuisine,
-      content: `Ингредиенты: ${form.value.ingredients
-        .map(ing => ing.toLowerCase())
-        .join(', ')}. ${form.value.instructions.join('. ')}`,
-      hashtags: form.value.hashtags,
-    };
-
-    const response = await fetch('http://localhost:8080/api/v1/recipes', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token.value}`,
-      },
-      body: JSON.stringify(payload),
-    });
-
-    // вернуть когда бэк научится работать с FormData + правки на фронте
-    // const formData = new FormData();
-    // formData.append('title', form.value.title);
-    // formData.append('cooking_time', totalMinutes);
-    // formData.append('dish_type_id', +form.value.category);
-    // formData.append('cuisine_id', +form.value.cuisine);
-    // formData.append('content', `Ингредиенты: ${form.value.ingredients.map(ing => ing.toLowerCase()).join(', ')}. ${form.value.instructions.join('. ')}`);
-    // formData.append('hashtags', JSON.stringify(form.value.hashtags));
-
-    // const file = form.value.image[0]?.raw;
-    // if (file) {
-    //   formData.append('image', file);
-    // }
-
-    // const response = await fetch('http://localhost:8080/api/v1/recipes', {
-    //   method: 'POST',
-    //   headers: {
-    //     Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImFkbWluIiwiZXhwIjoxNzQ0NzExMjgyfQ.upa1J54BRoMverjVA09jZyH1IzR4TC0kapWwL30bO_o`,
-    //   },
-    //   body: formData,
-    // });
-
-    if (!response.ok) {
-      throw new Error('Ошибка при отправке данных');
-    }
+    await recipeService.createRecipe(payload, token.value);
 
     ElNotification({
       title: 'Готово!',
@@ -454,36 +422,25 @@ watch(
 
 onMounted(async () => {
   recipeStore.fetchRecipes();
-  try {
-    const response = await fetch('http://localhost:8080/api/v1/recipes/types');
-    const data = await response.json();
 
-    categoryOptions.value = data.map((item: any) => ({
+  try {
+    const categories = await recipeService.getCategories();
+    categoryOptions.value = categories.map((item: any) => ({
       label: item.name,
       value: String(item.id),
     }));
-  } catch (err) {
-    console.error('Ошибка при загрузке категорий:', err);
-  }
 
-  try {
-    const response = await fetch('http://localhost:8080/api/v1/recipes/cuisines');
-    const data = await response.json();
-
-    cuisineOptions.value = data.map((item: any) => ({
+    const cuisines = await recipeService.getCuisines();
+    cuisineOptions.value = cuisines.map((item: any) => ({
       label: item.name,
       value: String(item.id),
     }));
-  } catch (err) {
-    console.error('Ошибка при загрузке национальных кухонь:', err);
-  }
 
-  try {
-    const response = await fetch('http://localhost:8080/api/v1/recipes/hashtags');
-    const data = await response.json();
-    hashtags.value = data
+    const tags = await recipeService.getHashtags();
+    hashtags.value = tags;
+
   } catch (err) {
-    console.error('Ошибка при загрузке хэштегов:', err);
+    console.error(err);
   }
 });
 </script>

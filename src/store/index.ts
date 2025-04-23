@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { recipeService } from '@/service/recipeService';
 
 interface State {
   recipes: any[];
@@ -52,12 +53,7 @@ export const useRecipeStore = defineStore("recipeStore", {
           params.append("max_cooking_time", this.selectedMaxTime.toString());
         }
 
-        const response = await fetch(`http://localhost:8080/api/v1/recipes?${params.toString()}`);
-        if (!response.ok) {
-          throw new Error(`Ошибка ${response.status}: ${response.statusText}`);
-        }
-
-        const data = await response.json();
+        const data = await recipeService.getRecipes(params);
 
         if (Array.isArray(data) && data.length) {
           this.recipes = data;
