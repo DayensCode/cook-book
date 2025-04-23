@@ -41,4 +41,3 @@ export const recipeService = {
     return data;
   },
 };
-

@@ -25,6 +25,7 @@
 import { ref, reactive } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { useRouter } from 'vue-router';
+import { authService } from '@/service/authService';
 
 import CustomInput from '@/components/CustomInput.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
@@ -80,22 +81,7 @@ const submitForm = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       try {
-        const response = await fetch('http://localhost:8080/api/v1/auth/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            login: formData.name,
-            password: formData.password,
-          }),
-        });
-
-        if (!response.ok) {
-          const error = await response.json();
-          alert(error.detail || 'Ошибка регистрации');
-          return;
-        }
+		await authService.register(formData.name, formData.password);
 
         router.push('/authorization');
       } catch (err) {

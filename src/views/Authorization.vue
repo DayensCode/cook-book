@@ -23,6 +23,7 @@ import { reactive, ref } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import { useAuthStore } from '@/store/auth';
 import { useRouter } from 'vue-router';
+import { authService } from '@/service/authService';
 
 import CustomInput from '@/components/CustomInput.vue';
 import SvgIcon from '@/components/SvgIcon.vue';
@@ -67,28 +68,9 @@ const login = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       try {
-        const formBody = new URLSearchParams();
-        formBody.append('username', formData.name);
-        formBody.append('password', formData.password);
+        const { access_token } = await authService.login(formData.name, formData.password);
 
-        const response = await fetch('http://localhost:8080/api/v1/auth/token', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: formBody,
-        });
-
-        if (!response.ok) {
-          const error = await response.json();
-          alert(error.detail || 'Ошибка входа');
-          return;
-        }
-
-        const data = await response.json();
-        const accessToken = data.access_token;
-
-        authStore.setToken(accessToken);
+        authStore.setToken(access_token);
         authStore.setUsername(formData.name);
 
         router.push('/');
