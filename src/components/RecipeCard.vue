@@ -1,7 +1,7 @@
 <template>
   <div class="recipe-card">
     <div class="image-container">
-      <img alt="recipe-card" src="../assets/img/recipe-card.png" />
+      <div class="image"></div>
       <div class="overlay">
         <div class="time">1ч 17м</div>
         <div class="ingredients">
@@ -45,6 +45,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .recipe-card {
+  margin-bottom: 30px;
   background-color: #e3cbbc;
   border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
@@ -53,9 +54,12 @@ export default defineComponent({
   .image-container {
     position: relative;
 
-    img {
+    .image {
       border-top-left-radius: 6px;
       border-top-right-radius: 6px;
+      height: 240px;
+      background-image: url("@/assets/img/recipe-card.png");
+      background-size: cover;
     }
   }
 

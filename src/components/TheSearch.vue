@@ -3,7 +3,7 @@
     <el-input class="search-input" v-model="searchQuery" type="text" @keyup.enter="searchRecipes" placeholder="Например, рецепты вторых блюд" clearable />
     <el-button class="btn-light-green" @click="searchRecipes" :disabled="!searchQuery.trim()">Найти</el-button>
   </div>
-  <div class="switchers" v-if="$route.path === '/saved-recepies'">
+  <div class="switchers" v-if="$route.path === '/saved-recipes'">
     <div>
       <el-switch v-model="fastCooking" class="search-toggle" />
       <span class="toggle-label">Быстро приготовить</span>

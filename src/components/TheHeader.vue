@@ -29,7 +29,7 @@
           <template #dropdown>
             <el-dropdown-menu class="menu-list">
               <el-dropdown-item>
-                <router-link to="/saved-recepies" class="flex">
+                <router-link to="/saved-recipes" class="flex">
                   <SvgIcon name="favorite" />
                   <span>Избранное</span>
                 </router-link>
@@ -73,9 +73,9 @@ const { query } = storeToRefs(recipeStore);
 const authStore = useAuthStore();
 const { isAuthorized, username } = storeToRefs(authStore);
 
-function searchRecipes() {
+const searchRecipes = () => {
   recipeStore.fetchRecipes();
-}
+};
 </script>
 
 <style lang="scss" scoped>

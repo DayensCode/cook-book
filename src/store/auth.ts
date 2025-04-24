@@ -4,6 +4,7 @@ interface AuthState {
   token: string | null;
   isAuthorized: boolean;
   username: string | null;
+  id: number | null;
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -11,6 +12,7 @@ export const useAuthStore = defineStore('auth', {
     token: null,
     isAuthorized: false,
     username: null,
+    id: null,
   }),
   actions: {
     setToken(token: string) {
@@ -20,14 +22,14 @@ export const useAuthStore = defineStore('auth', {
     },
     setUsername(username: string) {
       this.username = username;
-      localStorage.setItem('username', username);
     },
-    loadUserFromStorage() {
+    setId(id: number) {
+      this.id = id;
+    },
+    loadSessionFromStorage() {
       const token = localStorage.getItem('access_token');
-      const username = localStorage.getItem('username');
-      if (token && username) {
+      if (token) {
         this.token = token;
-        this.username = username;
         this.isAuthorized = true;
       }
     },
@@ -35,8 +37,8 @@ export const useAuthStore = defineStore('auth', {
       this.token = null;
       this.username = null;
       this.isAuthorized = false;
+      this.id = null;
       localStorage.removeItem('access_token');
-      localStorage.removeItem('username');
     },
   },
 });

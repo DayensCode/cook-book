@@ -5,6 +5,15 @@ const api = axios.create({
 });
 
 export const authService = {
+  async getCurrentUser(token: string) {
+    const { data } = await api.get('/auth/users/me', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  },
+  
   async login(username: string, password: string) {
     const body = new URLSearchParams();
     body.append('username', username);

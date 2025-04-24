@@ -24,7 +24,7 @@ export const useRecipeStore = defineStore("recipeStore", {
     selectedMaxTime: null,
   }),
   actions: {
-    async fetchRecipes() {
+    async fetchRecipes(authorId?: number | null) {
       this.loading = true;
       this.error = null;
 
@@ -51,6 +51,10 @@ export const useRecipeStore = defineStore("recipeStore", {
 
         if (this.selectedMaxTime) {
           params.append("max_cooking_time", this.selectedMaxTime.toString());
+        }
+
+        if (authorId) {
+          params.append("author_id", authorId.toString());
         }
 
         const data = await recipeService.getRecipes(params);

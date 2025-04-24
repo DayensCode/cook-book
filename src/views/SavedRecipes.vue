@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <TheSearch />
+    <!-- <TheSearch /> -->
 
     <div class="content">
       <RecipeCard />
@@ -12,20 +12,20 @@
   </div>
 </template>
 
-<script>
-import TheSearch from "@/components/TheSearch.vue";
+<script setup lang="ts">
+// import TheSearch from "@/components/TheSearch.vue";
 import RecipeCard from "@/components/RecipeCard.vue";
-
-export default {
-  name: "SavedRecipes",
-  components: { TheSearch, RecipeCard },
-};
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 .content {
   margin-top: 30px;
-  display: flex;
-  justify-content: space-between;
+  padding: 32px 40px 0;
+  background-color: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 13px;
 }
 </style>
