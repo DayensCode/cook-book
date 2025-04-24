@@ -8,7 +8,7 @@ import { useAuthStore } from '@/store/auth';
 const authStore = useAuthStore();
 
 onMounted(() => {
-  authStore.loadSessionFromStorage();
+  authStore.loadUserFromStorage();
 });
 </script>
 

@@ -22,14 +22,17 @@ export const useAuthStore = defineStore('auth', {
     },
     setUsername(username: string) {
       this.username = username;
+      localStorage.setItem('username', username);
     },
     setId(id: number) {
       this.id = id;
     },
-    loadSessionFromStorage() {
+    loadUserFromStorage() {
       const token = localStorage.getItem('access_token');
-      if (token) {
+      const username = localStorage.getItem('username');
+      if (token && username) {
         this.token = token;
+        this.username = username;
         this.isAuthorized = true;
       }
     },
@@ -39,6 +42,7 @@ export const useAuthStore = defineStore('auth', {
       this.isAuthorized = false;
       this.id = null;
       localStorage.removeItem('access_token');
+      localStorage.removeItem('username');
     },
   },
 });

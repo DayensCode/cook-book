@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="content">
+    <div class="list-content">
       <div class="left-widgets">
         <div class="filter-box">
           <h3>параметры рецептов</h3>
@@ -446,7 +446,7 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-.content {
+.list-content {
   margin-top: 40px;
   display: flex;
   gap: 40px;

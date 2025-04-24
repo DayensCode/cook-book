@@ -8,7 +8,7 @@
       <el-input
         v-model="query"
         class="search-input"
-        placeholder="Искать в CookBook"
+        :placeholder="placeholderText"
         clearable
         @clear="searchRecipes"
         @keyup.enter="searchRecipes"
@@ -60,9 +60,11 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useRecipeStore } from "@/store/index";
 import { useAuthStore } from "@/store/auth";
+import { useRoute } from 'vue-router';
 
 import Logout from "./Logout.vue";
 import SvgIcon from "./SvgIcon.vue";
@@ -73,9 +75,28 @@ const { query } = storeToRefs(recipeStore);
 const authStore = useAuthStore();
 const { isAuthorized, username } = storeToRefs(authStore);
 
+const route = useRoute();
+
 const searchRecipes = () => {
-  recipeStore.fetchRecipes();
+  if (route.name === 'RecipeCollections') {
+    recipeStore.fetchRecipes(authStore.id);
+  } else {
+    recipeStore.fetchRecipes();
+  }
 };
+
+const placeholderText = computed(() => {
+  switch (route.name) {
+    case "MainPage":
+      return "Искать в CookBook";
+    case "SavedRecipes":
+      return "Искать в избранных рецептах";
+    case "RecipeCollections":
+      return "Искать в созданных рецептах";
+    default:
+      return "Поиск рецептов...";
+  }
+});
 </script>
 
 <style lang="scss" scoped>

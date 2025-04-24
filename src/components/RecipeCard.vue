@@ -3,41 +3,70 @@
     <div class="image-container">
       <div class="image"></div>
       <div class="overlay">
-        <div class="time">1ч 17м</div>
+        <div class="time">{{ formattedTime }}</div>
         <div class="ingredients">
           <p>ингредиенты:</p>
           <ul>
-            <li>огурцы</li>
-            <li>болгарский перец</li>
-            <li>салат айсберг</li>
-            <li>зеленый лук</li>
+            <li v-for="(item, index) in ingredients" :key="index">{{ item }}</li>
           </ul>
         </div>
       </div>
     </div>
     <div class="description flex">
-      <h3>Постный салат</h3>
-      <SvgIcon :class="isLiked" :name="isLiked" @click="toggleLike" />
+      <div class="description__title flex">
+        <h3>{{ props.title }}</h3>
+        <SvgIcon class="edit" name="edit" />
+      </div>
+      <SvgIcon class="delete" name="delete" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, computed } from "vue";
 import SvgIcon from "@/components/SvgIcon.vue";
 
 export default defineComponent({
   name: "RecipeCard",
   components: { SvgIcon },
-  setup() {
-    const isLiked = ref<"like" | "like-fill">("like");
-    const toggleLike = () => {
-      isLiked.value = isLiked.value === "like" ? "like-fill" : "like";
-    };
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+    time: {
+      type: Number,
+      required: true,
+    },
+    instruction: {
+      type: String,
+      required: true,
+    }
+  },
+  setup(props) {
+    const formattedTime = computed(() => {
+      const hours = Math.floor(props.time / 60)
+      const minutes = props.time % 60
+
+      if (hours > 0 && minutes > 0) return `${hours} ч ${minutes} мин`
+      if (hours > 0) return `${hours} ч`
+      return `${minutes} мин`
+    })
+
+    const ingredients = computed(() => {
+      const match = props.instruction.match(/^Ингредиенты:\s*(.+?)\./i);
+      if (!match) return [];
+
+      return match[1]
+        .split(',')
+        .map(item => item.trim())
+        .filter(item => item.length > 0);
+    });
 
     return {
-      isLiked,
-      toggleLike
+      formattedTime,
+      ingredients,
+      props
     };
   },
 })
@@ -49,10 +78,11 @@ export default defineComponent({
   background-color: #e3cbbc;
   border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  cursor: pointer;
+  height: 300px;
 
   .image-container {
     position: relative;
+    cursor: pointer;
 
     .image {
       border-top-left-radius: 6px;
@@ -60,6 +90,10 @@ export default defineComponent({
       height: 240px;
       background-image: url("@/assets/img/recipe-card.png");
       background-size: cover;
+    }
+
+    &:hover .overlay {
+      opacity: 1;
     }
   }
 
@@ -95,19 +129,31 @@ export default defineComponent({
     }
   }
 
-  &:hover .overlay {
-    opacity: 1;
-  }
-
   .description {
     padding: 15px 20px 20px;
     justify-content: space-between;
+
+    .description__title {
+      justify-content: flex-start;
+    }
+
+    h3 {
+      font-size: 18px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      width: 80%;
+    }
   }
 }
 
-.like,
-.like-fill {
-  width: 18px;
-  height: 16px;
+.delete,
+.edit {
+  margin-left: 8px;
+  width: 19px;
+  height: 19px;
+  cursor: pointer;
 }
 </style>

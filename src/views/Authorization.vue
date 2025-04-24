@@ -70,6 +70,7 @@ const login = async () => {
       try {
         const { access_token } = await authService.login(formData.name, formData.password);
         authStore.setToken(access_token);
+		authStore.setUsername(formData.name);
 
         router.push('/');
       } catch (err) {

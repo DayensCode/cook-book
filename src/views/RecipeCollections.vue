@@ -1,38 +1,38 @@
 <template>
   <div class="container">
     <div class="content">
-      <RecipeCard />
-      <RecipeCard />
-      <RecipeCard />
-      <RecipeCard />
-      <RecipeCard />
+      <RecipeCard
+        v-for="recipe in recipes" 
+        :key="recipe.id"
+        :title="recipe.title"
+        :time="recipe.cooking_time"
+        :instruction="recipe.content"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
+import { authService } from '@/service/authService';
 import { useAuthStore } from '@/store/auth';
 import { useRecipeStore } from '@/store/index';
 const authStore = useAuthStore();
-const recipeStore = useRecipeStore()
+const recipeStore = useRecipeStore();
+const { recipes } = storeToRefs(recipeStore);
 
 import RecipeCard from "@/components/RecipeCard.vue";
 
-onMounted(() => {
-  recipeStore.fetchRecipes(authStore.id);
+onMounted(async () => {
+  if (authStore.token) {
+    try {
+      const user = await authService.getCurrentUser(authStore.token);
+      authStore.setId(user.id);
+      recipeStore.fetchRecipes(authStore.id);
+    } catch (error) {
+      console.error('Не удалось получить ID пользователя:', error);
+    }
+  }
 });
 </script>
-
-<style scoped lang="scss">
-.content {
-  margin-top: 30px;
-  padding: 32px 40px 0;
-  background-color: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 13px;
-}
-</style>
