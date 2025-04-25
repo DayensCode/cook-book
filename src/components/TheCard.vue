@@ -26,6 +26,7 @@
 import { defineProps, computed } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '@/store/auth';
+import { formatTime } from '@/helpers/index';
 
 import SvgIcon from "./SvgIcon.vue";
 
@@ -39,14 +40,7 @@ const props = defineProps<{
   time: number
 }>()
 
-const formattedTime = computed(() => {
-  const hours = Math.floor(props.time / 60)
-  const minutes = props.time % 60
-
-  if (hours > 0 && minutes > 0) return `${hours} ч ${minutes} мин`
-  if (hours > 0) return `${hours} ч`
-  return `${minutes} мин`
-})
+const formattedTime = computed(() => formatTime(props.time));
 </script>
 
 <style lang="scss" scoped>

@@ -1,0 +1,8 @@
+export function formatTime(minutesTotal: number): string {
+    const hours = Math.floor(minutesTotal / 60);
+    const minutes = minutesTotal % 60;
+  
+    if (hours > 0 && minutes > 0) return `${hours} ч ${minutes} мин`;
+    if (hours > 0) return `${hours} ч`;
+    return `${minutes} мин`;
+  }

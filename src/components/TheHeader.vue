@@ -22,10 +22,10 @@
 
       <div>
         <el-dropdown v-if="isAuthorized" trigger="hover">
-          <router-link to="/account" class="user-info flex">
+          <div class="user-info flex">
             <SvgIcon class="account" name="account" />
             <span>{{ username }}</span>
-          </router-link>
+          </div>
           <template #dropdown>
             <el-dropdown-menu class="menu-list">
               <router-link to="/saved-recipes" class="no-decorated">
@@ -135,7 +135,8 @@ const placeholderText = computed(() => {
   }
 
   .user-info {
-    cursor: pointer;
+    cursor: default;
+    color: #fff;
     font-size: 18px;
     outline: none !important;
   }
