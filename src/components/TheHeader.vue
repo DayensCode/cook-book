@@ -79,7 +79,7 @@ const route = useRoute();
 
 const searchRecipes = () => {
   if (route.name === 'RecipeCollections') {
-    recipeStore.fetchRecipes(authStore.id);
+    recipeStore.fetchRecipes(authStore.id, true);
   } else {
     recipeStore.fetchRecipes();
   }

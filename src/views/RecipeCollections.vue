@@ -29,7 +29,7 @@ onMounted(async () => {
     try {
       const user = await authService.getCurrentUser(authStore.token);
       authStore.setId(user.id);
-      recipeStore.fetchRecipes(authStore.id);
+      recipeStore.fetchRecipes(authStore.id, true);
     } catch (error) {
       console.error('Не удалось получить ID пользователя:', error);
     }

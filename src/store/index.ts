@@ -24,33 +24,35 @@ export const useRecipeStore = defineStore("recipeStore", {
     selectedMaxTime: null,
   }),
   actions: {
-    async fetchRecipes(authorId?: number | null) {
+    async fetchRecipes(authorId?: number | null, ignoreFilters = false) {
       this.loading = true;
       this.error = null;
 
       try {
         const params = new URLSearchParams();
 
-        if (this.query.trim()) {
-          params.append("search", this.query.trim());
-        }
+          if (this.query.trim()) {
+            params.append("search", this.query.trim());
+          }
 
-        if (this.selectedHashtags.length > 0) {
-          this.selectedHashtags.forEach((id) => {
-            params.append("hashtags", id.toString());
-          });
-        }
+        if (!ignoreFilters) {
+          if (this.selectedHashtags.length > 0) {
+            this.selectedHashtags.forEach((id) => {
+              params.append("hashtags", id.toString());
+            });
+          }
 
-        if (this.selectedCategory) {
-          params.append("dish_types", this.selectedCategory);
-        }
+          if (this.selectedCategory) {
+            params.append("dish_types", this.selectedCategory);
+          }
 
-        if (this.selectedCuisine) {
-          params.append("cuisines", this.selectedCuisine);
-        }
+          if (this.selectedCuisine) {
+            params.append("cuisines", this.selectedCuisine);
+          }
 
-        if (this.selectedMaxTime) {
-          params.append("max_cooking_time", this.selectedMaxTime.toString());
+          if (this.selectedMaxTime) {
+            params.append("max_cooking_time", this.selectedMaxTime.toString());
+          }
         }
 
         if (authorId) {
