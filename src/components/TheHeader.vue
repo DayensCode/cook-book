@@ -28,19 +28,19 @@
           </router-link>
           <template #dropdown>
             <el-dropdown-menu class="menu-list">
-              <el-dropdown-item>
-                <router-link to="/saved-recipes" class="flex">
+              <router-link to="/saved-recipes" class="no-decorated">
+                <el-dropdown-item>
                   <SvgIcon name="favorite" />
                   <span>Избранное</span>
-                </router-link>
-              </el-dropdown-item>
-              <el-dropdown-item>
-                <router-link to="/recipe-collections" class="flex">
+                </el-dropdown-item>
+              </router-link>
+              <router-link to="/recipe-collections" class="no-decorated">
+                <el-dropdown-item>
                   <SvgIcon name="created" />
                   <span>Созданное</span>
-                </router-link>
-              </el-dropdown-item>
-              <el-dropdown-item>
+                </el-dropdown-item>
+              </router-link>
+              <el-dropdown-item @click="handleLogout">
                 <Logout />
               </el-dropdown-item>
             </el-dropdown-menu>
@@ -64,7 +64,7 @@ import { computed } from "vue";
 import { storeToRefs } from "pinia";
 import { useRecipeStore } from "@/store/index";
 import { useAuthStore } from "@/store/auth";
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import Logout from "./Logout.vue";
 import SvgIcon from "./SvgIcon.vue";
@@ -76,6 +76,7 @@ const authStore = useAuthStore();
 const { isAuthorized, username } = storeToRefs(authStore);
 
 const route = useRoute();
+const router = useRouter();
 
 const searchRecipes = () => {
   if (route.name === 'RecipeCollections') {
@@ -83,6 +84,11 @@ const searchRecipes = () => {
   } else {
     recipeStore.fetchRecipes();
   }
+};
+
+const handleLogout = () => {
+  authStore.logout();
+  router.push('/');
 };
 
 const placeholderText = computed(() => {

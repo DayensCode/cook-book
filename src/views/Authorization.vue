@@ -1,10 +1,10 @@
 <template>
 	<div class="layout flex">
 		<el-form ref="formRef" hide-required-asterisk :model="formData" class="form-layout" :rules="rules">
-      <div class="flex auth-top">
-        <SvgIcon class="go-back" name="go-back" @click="goBack" />
-        <h2>Добро пожаловать!</h2>
-      </div>
+			<div class="flex auth-top">
+				<SvgIcon class="go-back" name="go-back" @click="goBack" />
+				<h2>Добро пожаловать!</h2>
+			</div>
 			<el-form-item label="Имя" prop="name">
 				<CustomInput v-model="formData.name" />
 			</el-form-item>
@@ -12,7 +12,7 @@
 				<CustomInput v-model="formData.password" type="password" />
 			</el-form-item>
 
-			<el-button class="btn-light-green" type="primary" @click="login">Войти</el-button>
+			<el-button class="btn-light-green" type="success" @click="login">Войти</el-button>
 			<p class="bottom-info">Нет аккаунта? <router-link to="/sign-up">Зарегистрироваться</router-link></p>
 		</el-form>
 	</div>
@@ -63,24 +63,24 @@ const rules: FormRules = {
 };
 
 const login = async () => {
-  if (!formRef.value) return;
+	if (!formRef.value) return;
 
-  formRef.value.validate(async (valid) => {
-    if (valid) {
-      try {
-        const { access_token } = await authService.login(formData.name, formData.password);
-        authStore.setToken(access_token);
-		authStore.setUsername(formData.name);
+	formRef.value.validate(async (valid) => {
+		if (valid) {
+			try {
+				const { access_token } = await authService.login(formData.name, formData.password);
+				authStore.setToken(access_token);
+				authStore.setUsername(formData.name);
 
-        router.push('/');
-      } catch (err) {
-        console.error(err);
-        alert('Ошибка соединения с сервером');
-      }
-    } else {
-      alert('Ошибка валидации');
-    }
-  });
+				router.push('/');
+			} catch (err) {
+				console.error(err);
+				alert('Ошибка соединения с сервером');
+			}
+		} else {
+			alert('Ошибка валидации');
+		}
+	});
 };
 
 const goBack = () => {

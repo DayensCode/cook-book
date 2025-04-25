@@ -582,6 +582,11 @@ onMounted(async () => {
     font-size: 18px;
     border-radius: 2rem;
     padding: 20px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #8ec6a3;
+    }
   }
 
   .el-button.is-disabled {

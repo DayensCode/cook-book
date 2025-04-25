@@ -1,10 +1,10 @@
 <template>
 	<div class="layout flex">
 		<el-form ref="formRef" hide-required-asterisk :rules="rules" :model="formData" class="form-layout">
-      <div class="flex auth-top">
-        <SvgIcon class="go-back" name="go-back" @click="goBack" />
-        <h2>Добро пожаловать!</h2>
-      </div>
+			<div class="flex auth-top">
+				<SvgIcon class="go-back" name="go-back" @click="goBack" />
+				<h2>Добро пожаловать!</h2>
+			</div>
 			<el-form-item label="Имя" prop="name">
 				<CustomInput v-model="formData.name" />
 			</el-form-item>
@@ -15,8 +15,8 @@
 				<CustomInput v-model="formData.passwordCheck" type="password" />
 			</el-form-item>
 
-			<el-button class="btn-light-green" type="primary" @click="submitForm">Зарегистрироваться</el-button>
-      <p class="bottom-info">Уже зарегестрированы? <router-link to="/authorization">Войти</router-link></p>
+			<el-button class="btn-light-green" type="success" @click="submitForm">Зарегистрироваться</el-button>
+			<p class="bottom-info">Уже зарегестрированы? <router-link to="/authorization">Войти</router-link></p>
 		</el-form>
 	</div>
 </template>
@@ -62,7 +62,7 @@ const validatePass = (rule: any, value: string, callback: (error?: Error) => voi
 const validatePassCheck = (rule: any, value: string, callback: (error?: Error) => void) => {
 	if (value === '') {
 		callback(new Error('Введите пароль повторно'));
-	}  else if (value !== formData.password) {
+	} else if (value !== formData.password) {
 		callback(new Error('Пароли не совпадают'));
 	} else {
 		callback();
@@ -76,22 +76,22 @@ const rules: FormRules = {
 };
 
 const submitForm = async () => {
-  if (!formRef.value) return;
+	if (!formRef.value) return;
 
-  formRef.value.validate(async (valid) => {
-    if (valid) {
-      try {
-		await authService.register(formData.name, formData.password);
+	formRef.value.validate(async (valid) => {
+		if (valid) {
+			try {
+				await authService.register(formData.name, formData.password);
 
-        router.push('/authorization');
-      } catch (err) {
-        console.error(err);
-        alert('Пользователь уже существует!');
-      }
-    } else {
-      alert('Ошибка валидации');
-    }
-  });
+				router.push('/authorization');
+			} catch (err) {
+				console.error(err);
+				alert('Пользователь уже существует!');
+			}
+		} else {
+			alert('Ошибка валидации');
+		}
+	});
 };
 
 const goBack = () => {
@@ -104,7 +104,7 @@ const goBack = () => {
 	min-height: 48rem;
 	height: 100vh;
 	flex-direction: column;
-  background-color: #E3CBBC;
+	background-color: #E3CBBC;
 }
 
 .form-layout {
@@ -115,16 +115,16 @@ const goBack = () => {
 	color: #2F2F2F;
 	padding: 2rem;
 
-  .auth-top {
-    justify-content: flex-start;
-    gap: 30px;
-    color: #2F2F2F;
-  }
+	.auth-top {
+		justify-content: flex-start;
+		gap: 30px;
+		color: #2F2F2F;
+	}
 
-  .bottom-info {
-    text-align: center;
-    color: #8B8B8B;
-    font-size: 16px;
-  }
+	.bottom-info {
+		text-align: center;
+		color: #8B8B8B;
+		font-size: 16px;
+	}
 }
 </style>

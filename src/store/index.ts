@@ -31,9 +31,9 @@ export const useRecipeStore = defineStore("recipeStore", {
       try {
         const params = new URLSearchParams();
 
-          if (this.query.trim()) {
-            params.append("search", this.query.trim());
-          }
+        if (this.query.trim()) {
+          params.append("search", this.query.trim());
+        }
 
         if (!ignoreFilters) {
           if (this.selectedHashtags.length > 0) {
