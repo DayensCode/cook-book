@@ -62,6 +62,7 @@
             :category="recipe.dish_type.name"
             :instruction="recipe.content"
             :time="recipe.cooking_time"
+            @click="goToRecipe(recipe.id)"
           />
         </div>
         <Pagination
@@ -221,6 +222,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { ElNotification } from 'element-plus';
 import type { FormRules } from 'element-plus';
 import { storeToRefs } from 'pinia';
@@ -233,6 +235,7 @@ import BaseModal from "./BaseModal.vue";
 import SvgIcon from './SvgIcon.vue';
 import Pagination from './Pagination.vue';
 
+const router = useRouter();
 const recipeStore = useRecipeStore();
 const { recipes, error, loading, selectedCategory, selectedCuisine, selectedHashtags, selectedMaxTime } = storeToRefs(recipeStore);
 const authStore = useAuthStore();
@@ -356,6 +359,10 @@ const toggleHashtag = (id: number) => {
   } else {
     form.value.hashtags.push(id);
   }
+};
+
+const goToRecipe = (recipeId: number) => {
+  router.push(`/recipe/${recipeId}`);
 };
 
 const handleCloseForm = () => {

@@ -6,6 +6,7 @@ import RecipeCollections from '../views/RecipeCollections.vue'
 import SavedRecipes from '../views/SavedRecipes.vue'
 import TheHeader from '../components/TheHeader.vue'
 import SignUp from '../views/SignUp.vue'
+import RecipeDetails from '../views/RecipeDetails.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -18,14 +19,20 @@ const routes: RouteRecordRaw[] = [
         component: MainPage,
       },
       {
-        path: '/recipe-collections',
+        path: 'recipe-collections',
         name: 'RecipeCollections',
         component: RecipeCollections,
       },
       {
-        path: '/saved-recipes',
+        path: 'saved-recipes',
         name: 'SavedRecipes',
         component: SavedRecipes,
+      },
+      {
+        path: 'recipe/:id',
+        name: 'RecipeDetails',
+        component: RecipeDetails,
+        props: true,
       },
     ],
   },

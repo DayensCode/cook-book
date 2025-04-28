@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" @click="$emit('click')">
     <div class="description">
       <div class="description__top">
         <div class="category background">Категория: {{ category }}</div>

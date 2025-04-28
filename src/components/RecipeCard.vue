@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
-import { formatTime } from '@/helpers/index';
+import { formatTime, formatIngredients } from '@/helpers/index';
 
 import SvgIcon from "@/components/SvgIcon.vue";
 
@@ -48,15 +48,7 @@ export default defineComponent({
   setup(props) {
     const formattedTime = computed(() => formatTime(props.time));
 
-    const ingredients = computed(() => {
-      const match = props.instruction.match(/^Ингредиенты:\s*(.+?)\./i);
-      if (!match) return [];
-
-      return match[1]
-        .split(',')
-        .map(item => item.trim())
-        .filter(item => item.length > 0);
-    });
+    const ingredients = computed(() => formatIngredients(props.instruction));
 
     return {
       formattedTime,

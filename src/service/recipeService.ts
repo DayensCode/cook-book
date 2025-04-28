@@ -10,6 +10,11 @@ export const recipeService = {
     return data;
   },
 
+  async getRecipeById(id: string) {
+    const { data } = await api.get(`/recipes/${id}`)
+    return data
+  },
+
   async getCategories() {
     const { data } = await api.get('/recipes/types');
     return data;
