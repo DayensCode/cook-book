@@ -7,6 +7,7 @@ import SavedRecipes from '../views/SavedRecipes.vue'
 import TheHeader from '../components/TheHeader.vue'
 import SignUp from '../views/SignUp.vue'
 import RecipeDetails from '../views/RecipeDetails.vue'
+import NotFound from '@/views/NotFound.vue'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -45,6 +46,11 @@ const routes: RouteRecordRaw[] = [
     path: '/sign-up',
     name: 'SignUp',
     component: SignUp,
+  },
+  {
+    path: '/:catchAll(.*)', 
+    name: 'NotFound',
+    component: NotFound, 
   },
 ]
 
