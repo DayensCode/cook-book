@@ -1,6 +1,6 @@
 <template>
   <div class="recipe-card">
-    <div class="image-container">
+    <div class="image-container" @click="$emit('click')">
       <div class="image"></div>
       <div class="overlay">
         <div class="time">{{ formattedTime }}</div>
@@ -17,7 +17,7 @@
         <h3>{{ props.title }}</h3>
         <SvgIcon class="edit" name="edit" />
       </div>
-      <SvgIcon class="delete" name="delete" />
+      <SvgIcon class="delete" name="delete" @click.stop="$emit('open')" />
     </div>
   </div>
 </template>

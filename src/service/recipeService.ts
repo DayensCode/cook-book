@@ -45,4 +45,13 @@ export const recipeService = {
     });
     return data;
   },
+
+  async deleteRecipe(id: number, token: string | null) {
+    const { data } = await api.delete(`/recipes/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return data;
+  },
 };
