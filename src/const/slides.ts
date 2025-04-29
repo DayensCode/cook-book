@@ -1,8 +1,4 @@
-export interface ISlideItem {
-  id: number;
-  title: string;
-  description: string;
-}
+import type { ISlideItem } from '@/types/interfaces';
 
 export const SlideItem: ISlideItem[] = [
   {

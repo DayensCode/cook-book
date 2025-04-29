@@ -225,6 +225,7 @@ import { ref, onMounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { ElNotification } from 'element-plus';
 import type { FormRules } from 'element-plus';
+import type { IRecipeForm } from '@/types/interfaces';
 import { storeToRefs } from 'pinia';
 import { useRecipeStore } from '@/store/index';
 import { useAuthStore } from '@/store/auth';
@@ -246,18 +247,6 @@ const isModalOpen = ref(false);
 const step = ref(1);
 const currentPage = ref(1);
 const pageSize = 3;
-
-interface IRecipeForm {
-  title: string;
-  hours: number;
-  minutes: number;
-  image: File[];
-  category: string;
-  cuisine: string;
-  ingredients: string[];
-  hashtags: number[];
-  instructions: string[];
-}
 
 const form = ref<IRecipeForm>({
   title: '',

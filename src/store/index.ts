@@ -1,19 +1,9 @@
 import { defineStore } from "pinia";
 import { recipeService } from '@/service/recipeService';
-
-interface State {
-  recipes: any[];
-  loading: boolean;
-  error: string | null;
-  query: string;
-  selectedHashtags: number[];
-  selectedCategory: string;
-  selectedCuisine: string;
-  selectedMaxTime: number | null;
-}
+import type { IRecipesState } from '@/types/interfaces';
 
 export const useRecipeStore = defineStore("recipeStore", {
-  state: (): State => ({
+  state: (): IRecipesState => ({
     recipes: [],
     loading: false,
     error: null,

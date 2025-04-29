@@ -1,14 +1,8 @@
 import { defineStore } from 'pinia';
-
-interface AuthState {
-  token: string | null;
-  isAuthorized: boolean;
-  username: string | null;
-  id: number | null;
-}
+import type { IAuthState } from '@/types/interfaces';
 
 export const useAuthStore = defineStore('auth', {
-  state: (): AuthState => ({
+  state: (): IAuthState => ({
     token: null,
     isAuthorized: false,
     username: null,

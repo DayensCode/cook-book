@@ -16,7 +16,8 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { Carousel, Slide, Navigation } from "vue3-carousel";
-import { SlideItem, ISlideItem } from "@/const/slides";
+import { SlideItem } from "@/const/slides";
+import type { ISlideItem } from '@/types/interfaces';
 
 const slides = ref<ISlideItem[]>(SlideItem);
 </script>
