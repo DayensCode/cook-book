@@ -6,6 +6,7 @@
       </router-link>
 
       <el-input
+        v-if="!isRecipePage"
         v-model="query"
         class="search-input"
         :placeholder="placeholderText"
@@ -90,6 +91,8 @@ const handleLogout = () => {
   authStore.logout();
   router.push('/');
 };
+
+const isRecipePage = computed(() => route.name === 'RecipeDetails');
 
 const placeholderText = computed(() => {
   switch (route.name) {
